@@ -11,45 +11,13 @@ model User {
   id        String      @id
   name      String
   email     String      @unique
-  cpf       String      @unique
   password  String
   role      String
-  active    Boolean
   createdAt DateTime
   
-  phone     Phone[]
-  address   Address[]
   authToken AuthToken[]
-  code      Code[]
 
   @@map("user")
-}
-
-model Phone {
-  id          String   @id
-  countryCode Int
-  ddd         Int
-  phone       Int
-  from        String
-  owner       User     @relation(fields: [ownerId], references: [id])
-  createdAt   DateTime
-  ownerId      String
-}
-
-model Address {
-  id        String   @id
-  city      String
-  street    String
-  country   String
-  state     String
-  number    Int
-  zipcode   String
-  from      String
-  owner     User     @relation(fields: [ownerId], references: [id])
-  createdAt DateTime
-  ownerId    String
-
-  @@map("address")
 }
 
 model AuthToken {
@@ -61,17 +29,4 @@ model AuthToken {
   userId                  String
 
   @@map("authToken")
-}
-
-model Code {
-  id        String   @id
-  user      User     @relation(fields: [userId], references: [id])
-  code      String
-  active    Boolean
-  expiresIn DateTime
-  createdAt DateTime
-  type      String
-  userId    String
-
-  @@map("code")
 }
