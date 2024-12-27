@@ -11,7 +11,7 @@ import { SecurityDecryptResponse } from '@/modules/user/adapters'
 
 describe('Create User', () => {
 
-    const makeSut = async () => {
+    const makeSut = () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
         const userRepository = new InMemoryUsersRepository()
@@ -24,7 +24,7 @@ describe('Create User', () => {
     }
 
     it('should create an user', async () => {
-        const { sut } = await makeSut()
+        const { sut } = makeSut()
 
         const user = await sut.execute({
             name: "valid name",
@@ -36,7 +36,7 @@ describe('Create User', () => {
     })
 
     it('should not create another user (email)', async () => {
-        const { sut } = await makeSut()
+        const { sut } = makeSut()
 
         await sut.execute({
             name: "valid name",
@@ -54,7 +54,7 @@ describe('Create User', () => {
     })
 
     it('should not create user if email is invalid', async () => {
-        const { sut } = await makeSut();
+        const { sut } = makeSut();
     
         const dataUser = {
             name: "valid name",
@@ -68,7 +68,7 @@ describe('Create User', () => {
     });
 
     it('should return an access and refresh token valids', async () => {
-        const { sut, securityAdapter, userTokenRepository } = await makeSut();
+        const { sut, securityAdapter, userTokenRepository } = makeSut();
 
         const user = await sut.execute({
             email: "flaamer@gmail.com",

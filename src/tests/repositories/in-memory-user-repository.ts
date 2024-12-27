@@ -1,7 +1,7 @@
 import { User } from "@/modules/user/domain";
-import { IUsersRepository, TypeChangeUserPassword } from "@/modules/user/repositories";
+import { IUserRepository, TypeChangeUserPassword } from "@/modules/user/repositories";
 
-export class InMemoryUsersRepository implements IUsersRepository {
+export class InMemoryUserRepository implements IUserRepository {
     public users: User[] = []
 
     private async findIndexById(id: string): Promise<number> {

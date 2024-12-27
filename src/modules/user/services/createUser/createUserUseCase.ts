@@ -8,9 +8,10 @@ import { isValidEmail } from "@/shared/utils";
 import { CreateSession } from "@/modules/user/utils/Session/SessionService";
 import { CreateUserCodeService } from "@/modules/user/utils/UserCode";
 import { IMailAdapter } from "@/shared/adapters";
+import { IUseCase } from "@/types/services.types";
 
 @injectable()
-export class CreateUserUseCase {
+export class CreateUserUseCase implements IUseCase{
     constructor(
         @inject('UserRepository')
         private readonly userRepository: IUserRepository,

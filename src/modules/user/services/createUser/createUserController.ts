@@ -1,34 +1,60 @@
-import { Request, Response } from "express";
 import { container } from "tsyringe";
 
 import { CreateUserUseCase } from "./createUserUseCase";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { userResponse } from "@/shared/helpers/response";
+import { IController } from "@/types/services.types"
 import { CreateUserRequest } from "@/modules/user/protocols";
+import { FastifyReply, FastifyRequest, RouteShorthandOptions } from "fastify";
 
-export class CreateUserController {
+export class CreateUserController implements IController{
 
-    async handle(request: Request, response: Response): Promise<Response> {
-        const { name, email, password }: CreateUserRequest = request.body
+    async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+        // const { name, email, password } = request.body as CreateUserRequest
 
-        if (!name || !email || !password) return response.status(422).json({erros: [new ErrInvalidParam('data')]})
+        // if (!name || !email || !password) return reply.status(422).send({erros: [new ErrInvalidParam('data')]})
 
-        try {
-            const createUserUseCase = container.resolve(CreateUserUseCase)
+        // try {
+        //     const createUserUseCase = container.resolve(CreateUserUseCase)
 
-            const user = await createUserUseCase.execute({
-                name,
-                email,
-                password
-            })
+        //     const user = await createUserUseCase.execute({
+        //         name,
+        //         email,
+        //         password
+        //     })
 
-            return response.status(201).json({data: userResponse(user)});
-        } catch (error) {
-            console.log(error)
-            if(error instanceof AppError) {
-                return response.status(error.status).json({ errors: [error] })
-            }
-            return response.status(500).json({erros: [new ErrServerError()]})
-        }
+        //     return reply.status(201).send({data: userResponse(user)});
+        // } catch (error) {
+        //     if(error instanceof AppError) {
+        //         return reply.status(error.status).send({ errors: [error] })
+        //     }
+        //     return reply.status(500).send({erros: [new ErrServerError()]})
+        // }
+        return reply.send("dsadas")
     }
+
+    // getSchema(): RouteShorthandOptions {
+    //     return {
+    //         description: 'Fetch user information',
+    //         tags: ['User'],
+    //         summary: 'Get user data',
+    //         response: {
+    //             200: {
+    //                 type: 'object',
+    //                 properties: {
+    //                     status: { type: 'string' },
+    //                     message: { type: 'string' },
+    //                     data: {
+    //                         type: 'object',
+    //                         properties: {
+    //                             id: { type: 'number' },
+    //                             name: { type: 'string' },
+    //                             email: { type: 'string' },
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     };
+    // }
 };

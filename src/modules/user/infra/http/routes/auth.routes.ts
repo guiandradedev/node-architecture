@@ -1,14 +1,22 @@
 import { AuthenticateUserController } from '@/modules/user/services/authenticateUser/authenticateUserController'
 import { CreateUserController } from '@/modules/user/services/createUser/createUserController'
-import { Router } from 'express'
+import { FastifyTypedInstance } from '@/types/fastify.types';
 
-const routes = Router()
+export async function authRoutes(app: FastifyTypedInstance) {
+    // app.get('/users', {
+    //     schema: {
+    //         tags: ['users'],
+    //         description: "asdsadas"
+    //     }
+    // }, () => {
+    //     return { message: 'User list' };
+    // });
 
-routes.get("/", (req, res) => {
-    res.send("Hello API")
-})
+    // app.get('/status', () => {
+    //     return { status: 'ok' };
+    // });
 
-routes.post('/auth', new CreateUserController().handle)
-routes.post('/auth/login', new AuthenticateUserController().handle)
+    app.post('/', new CreateUserController().handle)
+    app.post('/login', new AuthenticateUserController().handle)
 
-export default routes;
+}

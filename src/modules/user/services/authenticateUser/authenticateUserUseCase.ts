@@ -31,7 +31,7 @@ export class AuthenticateUserUseCase {
         const checkPassword = await this.hashAdapter.compare(password, user.props.password);
         if (!checkPassword) throw new ErrInvalidParam('email or password incorrect')
 
-        const newUserInstance = User.create({...user.props}, user.id)
+        if(!user.props.active) throw new ErrNotActive('user')
 
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken, refreshToken, refreshTokenExpiresDate } = await sessionService.execute({ email, id: user.id })
@@ -44,12 +44,12 @@ export class AuthenticateUserUseCase {
         })
         await this.UserTokenRepository.create(userToken)
 
-
         const tokenData: UserTokenResponse = {
             accessToken: accessToken,
             refreshToken: refreshToken
         }
-        
+
+        const newUserInstance = User.create({...user.props}, user.id)
         const userAuthenticated: UserAuthenticateResponse = Object.assign(newUserInstance, {token: tokenData})
 
         return userAuthenticated;
