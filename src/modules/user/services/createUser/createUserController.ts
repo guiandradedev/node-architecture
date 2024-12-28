@@ -6,13 +6,14 @@ import { userResponse } from "@/shared/helpers/response";
 import { IController } from "@/types/services.types"
 import { CreateUserRequest } from "@/modules/user/protocols";
 import { FastifyReply, FastifyRequest, RouteShorthandOptions } from "fastify";
+import { validateInput } from "@/shared/utils/validateInput";
 
 export class CreateUserController implements IController{
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const { name, email, password } = request.body as CreateUserRequest
 
-        if (!name || !email || !password) return reply.status(422).send({erros: [new ErrInvalidParam('data')]})
+        await validateInput({ name, email, password }, ['name', 'email', 'password']);
 
         try {
             const createUserUseCase = container.resolve(CreateUserUseCase)

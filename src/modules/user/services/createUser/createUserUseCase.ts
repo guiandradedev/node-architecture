@@ -31,7 +31,7 @@ export class CreateUserUseCase implements IUseCase{
         const userMailExists = await this.userRepository.findByEmail(email)
         if (userMailExists) throw new ErrAlreadyExists('User')
 
-        if(!isValidEmail(email)) throw new ErrInvalidParam('Email')
+        if(!isValidEmail(email)) throw new ErrInvalidParam('email')
 
         const passwordHash = await this.hashAdapter.hash(password)
         password = passwordHash;
@@ -71,7 +71,8 @@ export class CreateUserUseCase implements IUseCase{
         if (!active) {
             const createUserCode = new CreateUserCodeService(this.userRepository, this.UserCodeRepository, this.mailAdapter)
 
-            await createUserCode.execute({ user, type: "ACTIVATE_ACCOUNT" })
+            const code = await createUserCode.execute({ user, type: "ACTIVATE_ACCOUNT" })
+            console.log("Activate code", code)
         }
 
         return userReturn

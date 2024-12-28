@@ -1,33 +1,35 @@
-import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { ResetPasswordUseCase } from "./resetPasswordUseCase";
 import { ResetPasswordRequest } from "@/modules/user//protocols";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { validateInput } from "@/shared/utils/validateInput";
 
 export class ResetPasswordController {
 
-    async handle(request: Request, response: Response): Promise<Response> {
-        const {code, confirmPassword, password}: ResetPasswordRequest = request.body
+    async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+        const {code, confirmPassword, password} = request.body as ResetPasswordRequest
 
-        if (!code || !confirmPassword || !password) return response.status(422).json({ errors: [new ErrInvalidParam('data')] })
-
-        if (password !== confirmPassword) return response.status    (422).json({ errors: [new ErrInvalidParam('password and confirmPassword')] })
+        await validateInput({ code, confirmPassword, password }, ['code', 'password', 'confirmPassword']);
+        
+        if (password !== confirmPassword) return reply.status    (422).send({ errors: [new ErrInvalidParam('password and confirmPassword')] })
 
         try {
             const resetPasswordUseCase = container.resolve(ResetPasswordUseCase)
 
-            const user = await resetPasswordUseCase.execute({
+            await resetPasswordUseCase.execute({
                 code,
                 password,
                 confirmPassword
             })
 
-            return response.status(200).json({data: 'Password successful changed!'});
+            return reply.status(200).send({data: 'Password successful changed!'});
         } catch (error) {
             if(error instanceof AppError) {
-                return response.status(error.status).json({ errors: [error] })
+                return reply.status(error.status).send({ errors: [error] })
             }
-            return response.status(500).json({ errors: [new ErrServerError()] })
+            console.log(error)
+            return reply.status(500).send({ errors: [new ErrServerError()] })
         }
     }
 };

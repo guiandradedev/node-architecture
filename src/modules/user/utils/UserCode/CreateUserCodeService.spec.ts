@@ -30,7 +30,7 @@ describe("Create UserCode Service", async () => {
             name: "flaamer",
             password: "teste123",
         })
-        const response = sut.execute({ user })
+        const response = sut.execute({ user, type: "ACTIVATE_ACCOUNT" })
 
         await expect(response).resolves.not.toThrow()
     })

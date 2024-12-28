@@ -30,7 +30,7 @@ export class ForgotPasswordUseCase implements IUseCase{
             
             const createUserCode = new CreateUserCodeService(this.userRepository, this.userCodeRepository, this.mailAdapter)
             
-            await createUserCode.execute({ user: userExists, type: "ACTIVATE_ACCOUNT" })
+            const code = await createUserCode.execute({ user: userExists, type: "ACTIVATE_ACCOUNT" })
 
             throw new ErrNotActive('user')
         }
@@ -38,6 +38,7 @@ export class ForgotPasswordUseCase implements IUseCase{
         const createUserCode = new CreateUserCodeService(this.userRepository, this.userCodeRepository, this.mailAdapter)
         
         const userCode = await createUserCode.execute({ user: userExists, type: "FORGOT_PASSWORD"})
+        console.log("Forgot code", userCode)
 
         return userCode
     }

@@ -4,6 +4,8 @@ import { JwtSecurityAdapter } from "@/modules/user/adapters/security/implementat
 // import { PrismaUserTokenRepository } from "@/modules/user/infra/repositories/prisma";
 import { PrismaUserRepository } from "@/modules/user/infra/repositories/prisma/PrismaUserRepository";
 import { IUserTokenRepository, IUserRepository, IUserCodeRepository } from "@/modules/user/repositories";
+import { IMailAdapter } from "@/shared/adapters";
+import { InMemoryMailAdapter } from "@/tests/adapters";
 import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from "@/tests/repositories";
 import { container } from "tsyringe";
 
@@ -30,4 +32,9 @@ container.registerSingleton<IUserCodeRepository>(
 container.registerSingleton<ISecurityAdapter>(
     "SecurityAdapter",
     JwtSecurityAdapter
+)
+
+container.registerSingleton<IMailAdapter>(
+    "MailAdapter",
+    InMemoryMailAdapter
 )

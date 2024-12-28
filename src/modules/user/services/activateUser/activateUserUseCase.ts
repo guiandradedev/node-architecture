@@ -10,7 +10,7 @@ import { CreateUserCodeService } from "@/modules/user/utils";
 @injectable()
 export class ActivateUserUseCase {
     constructor(
-        @inject('UsersRepository')
+        @inject('UserRepository')
         private userRepository: IUserRepository,
 
         @inject('UserCodeRepository')

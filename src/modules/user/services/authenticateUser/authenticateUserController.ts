@@ -4,14 +4,15 @@ import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { AuthenticateUserRequest } from "@/modules/user/protocols/authenticateUserDTO";
 import { userTokenResponse } from "@/shared/helpers/response";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { validateInput } from "@/shared/utils/validateInput";
 
 export class AuthenticateUserController {
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const { email, password } = request.body as AuthenticateUserRequest
 
-        if (!email || !password) return reply.status(422).send({ errors: [new ErrInvalidParam('data')] })
-
+        await validateInput({ email, password }, ['email', 'password']);
+        
         try {
             const authenticateUserUseCase = container.resolve(AuthenticateUserUseCase)
 

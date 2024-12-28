@@ -3,14 +3,15 @@ import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { ActivateUserUseCase } from "./activateUserUseCase";
 import { ActivateUserRequest } from "@/modules/user/protocols";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { validateInput } from "@/shared/utils/validateInput";
 
 export class ActivateUserController {
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const {code, userId} = request.body as ActivateUserRequest
 
-        if (!code || !userId) return reply.status(422).send({ errors: [new ErrInvalidParam('data')] })
-
+        await validateInput({ code, userId }, ['code', 'userId']);
+        
         try {
             const activateUserUseCase = container.resolve(ActivateUserUseCase)
 

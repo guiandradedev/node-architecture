@@ -1,29 +1,30 @@
-import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { ForgotPasswordUseCase } from "./forgotPasswordUseCase";
 import { ForgotPasswordRequest } from "@/modules/user/protocols";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { validateInput } from "@/shared/utils/validateInput";
 
 export class ForgotPasswordController {
 
-    async handle(request: Request, response: Response): Promise<Response> {
-        const {email}: ForgotPasswordRequest = request.body
+    async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
+        const {email} = request.body as ForgotPasswordRequest
 
-        if (!email) return response.status(422).json({ errors: [new ErrInvalidParam('email')] })
-
+        await validateInput({ email }, ['email']);
+        
         try {
             const forgotPasswordUseCase = container.resolve(ForgotPasswordUseCase)
 
-            const user = await forgotPasswordUseCase.execute({
+            await forgotPasswordUseCase.execute({
                 email
             })
 
-            return response.status(200).json({data: 'Code sent in your email'});
+            return reply.status(200).send({data: 'Code sent in your email'});
         } catch (error) {
             if(error instanceof AppError) {
-                return response.status(error.status).json({ errors: [error] })
+                return reply.status(error.status).send({ errors: [error] })
             }
-            return response.status(500).json({ errors: [new ErrServerError()] })
+            return reply.status(500).send({ errors: [new ErrServerError()] })
         }
     }
 };

@@ -1,4 +1,4 @@
-import { IHashAdapter } from "@/modules/user/adapters/hash/hash";
+import { IHashAdapter } from "@/modules/user/adapters";
 
 export class InMemoryHashAdapter implements IHashAdapter {
     async hash(value: string): Promise<string> {
