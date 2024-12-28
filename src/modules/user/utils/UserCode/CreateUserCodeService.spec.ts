@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import 'dotenv/config'
 import { describe, expect, it, vitest } from "vitest";
-import { InMemoryUserCodeRepository, InMemoryUsersRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
+import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
 import { CreateUserCodeService } from './CreateUserCodeService';
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
 import { CreateUserUseCase } from '../../services/createUser/createUserUseCase';
@@ -11,7 +11,7 @@ describe("Create UserCode Service", async () => {
     const makeSut = async () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
-        const userRepository = new InMemoryUsersRepository()
+        const userRepository = new InMemoryUserRepository()
         const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()

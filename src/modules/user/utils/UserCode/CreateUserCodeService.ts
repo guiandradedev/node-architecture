@@ -12,7 +12,7 @@ export class CreateUserCodeService {
             private readonly mailAdapter: IMailAdapter,
         ) { }
 
-    async execute({ user }: GenerateUserDTO): Promise<void> {
+    async execute({ user, type}: GenerateUserDTO): Promise<UserCode> {
         const generateUserCode = new GenerateUserCode()
         
         const date = new Date();
@@ -26,11 +26,17 @@ export class CreateUserCodeService {
             expiresIn,
             createdAt: new Date(),
             userId: user.id,
-            type: "ACTIVATE_ACCOUNT"
+            type
         })
         await this.userCodeRepository.create(userCode)
 
         const sendUserMail = new SendUserMail(this.mailAdapter)
-        await sendUserMail.authMail({ to: user.props.email, code })
+        if(type == "ACTIVATE_ACCOUNT") {
+            await sendUserMail.authMail({ to: user.props.email, code })
+        } else if(type == "FORGOT_PASSWORD") {
+            await sendUserMail.resetPasswordMail({ to: user.props.email, code })
+        }
+
+        return userCode
     }
 }

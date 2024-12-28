@@ -1,11 +1,11 @@
 import 'dotenv/config'
 import 'reflect-metadata'
-import { describe, it, expect, vitest } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { CreateUserUseCase } from './createUserUseCase'
-import { User, UserCode, UserToken } from '@/modules/user/domain'
-import { AppError, ErrAlreadyExists, ErrInvalidParam } from '@/shared/errors'
+import { User, UserToken } from '@/modules/user/domain'
+import { ErrAlreadyExists, ErrInvalidParam } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { InMemoryUserCodeRepository, InMemoryUsersRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
+import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
 import { UserTokenResponse } from '@/modules/user/protocols'
 import { SecurityDecryptResponse } from '@/modules/user/adapters'
 
@@ -14,7 +14,7 @@ describe('Create User', () => {
     const makeSut = () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
-        const userRepository = new InMemoryUsersRepository()
+        const userRepository = new InMemoryUserRepository()
         const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()

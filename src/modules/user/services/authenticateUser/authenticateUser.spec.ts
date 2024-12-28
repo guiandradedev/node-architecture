@@ -1,19 +1,19 @@
 import 'dotenv/config'
 import 'reflect-metadata'
-import { describe, it, expect, vitest } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { User } from '@/modules/user/domain'
 import { ErrInvalidParam, ErrNotActive } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { InMemoryUserCodeRepository, InMemoryUsersRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
+import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
 import { CreateUserUseCase, AuthenticateUserUseCase } from '@/modules/user/services'
-import { UserTokenResponse } from '../../protocols'
-import { SecurityDecryptResponse } from '../../adapters'
+import { UserTokenResponse } from '@/modules/user/protocols'
+import { SecurityDecryptResponse } from '@/modules/user/adapters'
 
 describe('Authentication', async () => {
     const makeSut = () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
-        const userRepository = new InMemoryUsersRepository()
+        const userRepository = new InMemoryUserRepository()
         const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
@@ -72,13 +72,13 @@ describe('Authentication', async () => {
     it('Should throw an error if user does not exists', async () => {
         const { sut } = makeSut()
 
-        const dataObj = {
+        const response = sut.execute({
             email: "fake_email@email.com",
             password: "fake_password"
-        }
+        })
 
-        expect(async () => await sut.execute(dataObj)).not.toBeInstanceOf(User)
-        expect(async () => await sut.execute(dataObj)).rejects.toBeInstanceOf(ErrInvalidParam)
+        await expect(response).not.toBeInstanceOf(User)
+        await expect(response).rejects.toBeInstanceOf(ErrInvalidParam)
     })
 
     it('Should throw an error if password != user.password', async () => {
@@ -90,13 +90,13 @@ describe('Authentication', async () => {
             password: "teste123",
         })
 
-        const dataObj = {
+        const response = sut.execute({
             email: "fake_email@email.com",
             password: "fake_password"
-        }
+        })
 
-        expect(async () => await sut.execute(dataObj)).not.toBeInstanceOf(User)
-        expect(async () => await sut.execute(dataObj)).rejects.toBeInstanceOf(ErrInvalidParam)
+        await expect(response).not.toBeInstanceOf(User)
+        await expect(response).rejects.toBeInstanceOf(ErrInvalidParam)
     })
 
     it('should return an access and refresh token valids', async () => {

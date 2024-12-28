@@ -71,7 +71,7 @@ export class CreateUserUseCase implements IUseCase{
         if (!active) {
             const createUserCode = new CreateUserCodeService(this.userRepository, this.UserCodeRepository, this.mailAdapter)
 
-            await createUserCode.execute({ user })
+            await createUserCode.execute({ user, type: "ACTIVATE_ACCOUNT" })
         }
 
         return userReturn

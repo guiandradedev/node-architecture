@@ -1,0 +1,44 @@
+import { inject, injectable } from "tsyringe";
+import { ForgotPasswordRequest, ForgotPasswordResponse } from "@/modules/user/protocols";
+import { IUserCodeRepository, IUserRepository } from "@/modules/user/repositories";
+import { ErrNotActive, ErrNotFound } from "@/shared/errors";
+import { CreateUserCodeService } from "@/modules/user/utils/UserCode";
+import { IMailAdapter } from "@/shared/adapters";
+import { IUseCase } from "@/types/services.types";
+
+@injectable()
+export class ForgotPasswordUseCase implements IUseCase{
+    constructor(
+        @inject('UserRepository')
+        private userRepository: IUserRepository,
+
+        @inject('UserCodeRepository')
+        private userCodeRepository: IUserCodeRepository,
+
+        @inject('MailAdapter')
+        private mailAdapter: IMailAdapter
+    ) { }
+
+    async execute({ email }: ForgotPasswordRequest): Promise<ForgotPasswordResponse> {
+        const userExists = await this.userRepository.findByEmail(email)
+        if (!userExists) throw new ErrNotFound('user')
+        
+        if (!userExists.props.active) {
+            //resend activate email here
+
+            // await this.userCodeRepository.changeCodeStatus(codeExists.id)
+            
+            const createUserCode = new CreateUserCodeService(this.userRepository, this.userCodeRepository, this.mailAdapter)
+            
+            await createUserCode.execute({ user: userExists, type: "ACTIVATE_ACCOUNT" })
+
+            throw new ErrNotActive('user')
+        }
+
+        const createUserCode = new CreateUserCodeService(this.userRepository, this.userCodeRepository, this.mailAdapter)
+        
+        const userCode = await createUserCode.execute({ user: userExists, type: "FORGOT_PASSWORD"})
+
+        return userCode
+    }
+}

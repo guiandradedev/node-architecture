@@ -10,27 +10,26 @@ import { FastifyReply, FastifyRequest, RouteShorthandOptions } from "fastify";
 export class CreateUserController implements IController{
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
-        // const { name, email, password } = request.body as CreateUserRequest
+        const { name, email, password } = request.body as CreateUserRequest
 
-        // if (!name || !email || !password) return reply.status(422).send({erros: [new ErrInvalidParam('data')]})
+        if (!name || !email || !password) return reply.status(422).send({erros: [new ErrInvalidParam('data')]})
 
-        // try {
-        //     const createUserUseCase = container.resolve(CreateUserUseCase)
+        try {
+            const createUserUseCase = container.resolve(CreateUserUseCase)
 
-        //     const user = await createUserUseCase.execute({
-        //         name,
-        //         email,
-        //         password
-        //     })
+            const user = await createUserUseCase.execute({
+                name,
+                email,
+                password
+            })
 
-        //     return reply.status(201).send({data: userResponse(user)});
-        // } catch (error) {
-        //     if(error instanceof AppError) {
-        //         return reply.status(error.status).send({ errors: [error] })
-        //     }
-        //     return reply.status(500).send({erros: [new ErrServerError()]})
-        // }
-        return reply.send("dsadas")
+            return reply.status(201).send({data: userResponse(user)});
+        } catch (error) {
+            if(error instanceof AppError) {
+                return reply.status(error.status).send({ errors: [error] })
+            }
+            return reply.status(500).send({erros: [new ErrServerError()]})
+        }
     }
 
     // getSchema(): RouteShorthandOptions {

@@ -1,5 +1,6 @@
-import { TypeUserRoles, User } from "../domain"
+import { TypesUserCode, TypeUserRoles, User } from "../domain"
 
 export type GenerateUserDTO = {
-    user: User
+    user: User,
+    type: TypesUserCode
 }
