@@ -27,7 +27,7 @@ export class CreateUserUseCase implements IUseCase{
         private securityAdapter: ISecurityAdapter,
     ) { }
 
-    async execute({ name, email, password, role, createdAt, updatedAt , active }: CreateUserRequest): Promise<UserAuthenticateResponse> {
+    async execute({ name, email, password, role, createdAt, updatedAt , account_activate_at }: CreateUserRequest): Promise<UserAuthenticateResponse> {
         const userMailExists = await this.userRepository.findByEmail(email)
         if (userMailExists) throw new ErrAlreadyExists('User')
 
@@ -36,6 +36,7 @@ export class CreateUserUseCase implements IUseCase{
         const passwordHash = await this.hashAdapter.hash(password)
         password = passwordHash;
 
+
         const user = User.create({
             name,
             createdAt: createdAt ?? new Date(),
@@ -43,7 +44,7 @@ export class CreateUserUseCase implements IUseCase{
             email,
             password,
             role: role ?? "USER",
-            active: active ?? false
+            account_activate_at: account_activate_at ?? null
         })
 
         await this.userRepository.create(user)
@@ -68,11 +69,14 @@ export class CreateUserUseCase implements IUseCase{
             }
         })
 
-        if (!active) {
-            const createUserCode = new CreateUserCodeService(this.userRepository, this.UserCodeRepository, this.mailAdapter)
-
-            const code = await createUserCode.execute({ user, type: "ACTIVATE_ACCOUNT" })
-            console.log("Activate code", code)
+        if (!account_activate_at) {
+            try {
+                const createUserCode = new CreateUserCodeService(this.userRepository, this.UserCodeRepository, this.mailAdapter)
+    
+                const code = await createUserCode.execute({ user, type: "ACTIVATE_ACCOUNT" })
+            } catch (error) {
+                console.log(error)                
+            }
         }
 
         return userReturn

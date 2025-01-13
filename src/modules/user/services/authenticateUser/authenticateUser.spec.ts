@@ -40,7 +40,7 @@ describe('Authentication', async () => {
             email: "flaamer@gmail.com",
             name: "flaamer",
             password: "teste123",
-            active: true
+            account_activate_at: new Date()
         })
 
         const user = await sut.execute({
@@ -106,7 +106,7 @@ describe('Authentication', async () => {
             email: "flaamer@gmail.com",
             name: "flaamer",
             password: "teste123",
-            active: true
+            account_activate_at: new Date()
         })
 
         const user = await sut.execute({

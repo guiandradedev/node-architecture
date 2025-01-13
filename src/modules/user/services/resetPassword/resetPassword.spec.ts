@@ -25,7 +25,7 @@ describe('Reset Password', () => {
             name: "Flaamer",
             email: "teste@teste.com",
             password: "teste123",
-            active: true
+            account_activate_at: new Date()
         })
 
         const forgotPasswordAdapter = new ForgotPasswordUseCase(userRepository, userCodeRepository, mailAdapter)
@@ -48,7 +48,8 @@ describe('Reset Password', () => {
         const reset = await sut.execute({
             code: code.props.code,
             password,
-            confirmPassword: password
+            confirmPassword: password,
+            email: user.props.email
         })
 
         expect(reset).toBeInstanceOf(User)
@@ -57,12 +58,13 @@ describe('Reset Password', () => {
     })
 
     it('should throw an error if code is invalid', async () => {
-        const { sut } = await makeSut()
+        const { sut, user } = await makeSut()
 
         const reset = sut.execute({
             code: "invalid_code",
             password: "password",
-            confirmPassword: "password"
+            confirmPassword: "password",
+            email: user.props.email
         })
 
         await expect(reset).rejects.toBeInstanceOf(ErrInvalidParam)
@@ -74,7 +76,7 @@ describe('Reset Password', () => {
             email: "flaamer@gmail.com",
             name: "Guilherme",
             password: "teste123",
-            active: true
+            account_activate_at: new Date()
         })
         const generateActivateCode = vitest.spyOn(GenerateUserCode.prototype, 'execute')
         const date = new Date()
@@ -92,7 +94,8 @@ describe('Reset Password', () => {
         const reset = sut.execute({
             code: code.props.code,
             password,
-            confirmPassword: password
+            confirmPassword: password,
+            email: user.props.email
         })
 
         await expect(reset).rejects.toBeInstanceOf(ErrExpired)
@@ -100,12 +103,13 @@ describe('Reset Password', () => {
 
 
     it('should throw an error if password and confirm password does not match', async () => {
-        const { sut, code } = await makeSut()
+        const { sut, code, user } = await makeSut()
 
         const reset = sut.execute({
             code: code.props.code,
             password: 'valid_password',
-            confirmPassword: 'invalid_password'
+            confirmPassword: 'invalid_password',
+            email: user.props.email
         })
 
         await expect(reset).rejects.toBeInstanceOf(ErrInvalidParam)

@@ -1,0 +1,25 @@
+services:
+    app_database:
+        image: postgres:alpine
+        restart: always
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: app_database
+        ports:
+            - 5432:5432
+        volumes:
+            - app_database:/var/lib/postgresql/data
+    mailpit:
+      image: 'axllent/mailpit:latest'
+      ports:
+          - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+          - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+      networks:
+          - src_default
+volumes:
+    app_database:
+        driver: local
+networks:
+    src_default:
+        driver: bridge

@@ -11,7 +11,7 @@ import { SendUserMail } from "@/shared/helpers";
 @injectable()
 export class ResetPasswordUseCase implements IUseCase{
     constructor(
-        @inject('UsersRepository')
+        @inject('UserRepository')
         private userRepository: IUserRepository,
 
         @inject('UserCodeRepository')
@@ -24,13 +24,21 @@ export class ResetPasswordUseCase implements IUseCase{
         private hashAdapter: IHashAdapter,
     ) { }
 
-    async execute({ code, password, confirmPassword }: ResetPasswordRequest): Promise<ResetPasswordResponse> {
+    async execute({ code, password, confirmPassword, email }: ResetPasswordRequest): Promise<ResetPasswordResponse> {
+        const userExists = await this.userRepository.findByEmail(email)
+        if(!userExists) throw new ErrInvalidParam('email')
+
         const codeExists = await this.userCodeRepository.findByCode({ code, type: 'FORGOT_PASSWORD' })
         if (!codeExists) throw new ErrInvalidParam('code')
 
         if (codeExists.props.expiresIn < new Date() || codeExists.props.active == false) {
             throw new ErrExpired('code')
         }
+
+        if(userExists.id != codeExists.props.userId) throw new ErrInvalidParam('code, email')
+
+        // desativa o codigo antigo
+        await this.userCodeRepository.changeCodeStatus(codeExists.id)
 
         if (password !== confirmPassword) throw new ErrInvalidParam('password and confirmPassword')
 

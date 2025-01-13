@@ -13,9 +13,9 @@ export class CreateUserController implements IController{
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const { name, email, password } = request.body as CreateUserRequest
 
-        await validateInput({ name, email, password }, ['name', 'email', 'password']);
-
         try {
+            await validateInput({ name, email, password }, ['name', 'email', 'password']);
+
             const createUserUseCase = container.resolve(CreateUserUseCase)
 
             const user = await createUserUseCase.execute({
@@ -26,6 +26,7 @@ export class CreateUserController implements IController{
 
             return reply.status(201).send({data: userResponse(user)});
         } catch (error) {
+            console.log(error)
             if(error instanceof AppError) {
                 return reply.status(error.status).send({ errors: [error] })
             }

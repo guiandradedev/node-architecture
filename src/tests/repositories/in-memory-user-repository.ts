@@ -35,9 +35,13 @@ export class InMemoryUserRepository implements IUserRepository {
     async changeStatus(id: string): Promise<boolean> {
         const data = this.users.find(user=>user.id === id)
         if(!data) return null;
-        const status = !data.props.active
-        data.props.active = status
-        return status; 
+        let status = null;
+        if(!data.props.account_activate_at) {
+            status = new Date();
+        }
+        // const status = !data.props.account_activate_at
+        data.props.account_activate_at = status
+        return !!status; 
     }
 
     async changePassword({userId, password}: TypeChangeUserPassword): Promise<User> {

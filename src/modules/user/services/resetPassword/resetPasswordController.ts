@@ -8,19 +8,21 @@ import { validateInput } from "@/shared/utils/validateInput";
 export class ResetPasswordController {
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
-        const {code, confirmPassword, password} = request.body as ResetPasswordRequest
+        const {code, confirmPassword, password, email} = request.body as ResetPasswordRequest
 
-        await validateInput({ code, confirmPassword, password }, ['code', 'password', 'confirmPassword']);
         
-        if (password !== confirmPassword) return reply.status    (422).send({ errors: [new ErrInvalidParam('password and confirmPassword')] })
-
         try {
+            await validateInput({ code, confirmPassword, password, email }, ['code', 'password', 'confirmPassword', 'email']);
+            
+            if (password !== confirmPassword) return reply.status(422).send({ errors: [new ErrInvalidParam('password and confirmPassword')] })
+                
             const resetPasswordUseCase = container.resolve(ResetPasswordUseCase)
 
             await resetPasswordUseCase.execute({
                 code,
                 password,
-                confirmPassword
+                confirmPassword,
+                email
             })
 
             return reply.status(200).send({data: 'Password successful changed!'});

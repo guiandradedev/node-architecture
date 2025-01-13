@@ -10,9 +10,9 @@ export class ActivateUserController {
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const {code, userId} = request.body as ActivateUserRequest
 
-        await validateInput({ code, userId }, ['code', 'userId']);
-        
         try {
+            await validateInput({ code, userId }, ['code', 'userId']);
+
             const activateUserUseCase = container.resolve(ActivateUserUseCase)
 
             await activateUserUseCase.execute({

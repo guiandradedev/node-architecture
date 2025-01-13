@@ -8,5 +8,5 @@ export interface CreateUserRequest extends UseCaseRequest {
     role?: TypeUserRoles,
     createdAt?: Date,
     updatedAt?: Date,
-    active?: boolean
+    account_activate_at?: Date
 }

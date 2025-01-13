@@ -31,7 +31,7 @@ export class AuthenticateUserUseCase {
         const checkPassword = await this.hashAdapter.compare(password, user.props.password);
         if (!checkPassword) throw new ErrInvalidParam('email or password incorrect')
 
-        if(!user.props.active) throw new ErrNotActive('user')
+        if(!user.props.account_activate_at) throw new ErrNotActive('user')
 
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken, refreshToken, refreshTokenExpiresDate } = await sessionService.execute({ email, id: user.id })

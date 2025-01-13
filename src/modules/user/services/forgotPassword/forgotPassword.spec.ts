@@ -22,7 +22,7 @@ describe('Forgot Password', () => {
             name: "Flaamer",
             email: "teste@teste.com",
             password: "teste123",
-            active: true
+            account_activate_at: new Date()
         })
 
         const sut = new ForgotPasswordUseCase(userRepository, userCodeRepository, mailAdapter)
@@ -39,6 +39,18 @@ describe('Forgot Password', () => {
 
         expect(code).toBeInstanceOf(UserCode)
     })
+    // it('should soft delete all unused codes', async () => {
+    //     const { sut, user } = await makeSut()
+
+    //     await sut.execute({
+    //         email: user.props.email
+    //     })
+    //     await sut.execute({
+    //         email: user.props.email
+    //     })
+
+    //     expect(code).toBeInstanceOf(UserCode)
+    // })
 
     it('should throw an error if user does not exists', async () => {
         const { sut } = await makeSut()

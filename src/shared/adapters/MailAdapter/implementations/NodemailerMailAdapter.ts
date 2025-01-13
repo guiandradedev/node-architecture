@@ -38,6 +38,7 @@ export class NodemailerMailAdapter implements IMailAdapter {
             })
 
         } catch (error) {
+            console.log(error)
             throw new ErrServerError()
         }
     }

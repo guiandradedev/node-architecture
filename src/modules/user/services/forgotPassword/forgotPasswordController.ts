@@ -10,9 +10,9 @@ export class ForgotPasswordController {
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const {email} = request.body as ForgotPasswordRequest
 
-        await validateInput({ email }, ['email']);
-        
         try {
+            await validateInput({ email }, ['email']);
+            
             const forgotPasswordUseCase = container.resolve(ForgotPasswordUseCase)
 
             await forgotPasswordUseCase.execute({

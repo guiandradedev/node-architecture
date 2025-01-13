@@ -21,4 +21,5 @@ export interface IUserCodeRepository {
     findByCode(data: FindByCode): Promise<UserCode>
     findByUserId(data: FindCodeByUserId): Promise<UserCode>
     changeCodeStatus(id: string): Promise<boolean>
+    deleteAllUserCode(id: string, type: TypesUserCode): Promise<void>
 }

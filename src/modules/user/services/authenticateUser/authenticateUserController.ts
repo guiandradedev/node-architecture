@@ -11,9 +11,9 @@ export class AuthenticateUserController {
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const { email, password } = request.body as AuthenticateUserRequest
 
-        await validateInput({ email, password }, ['email', 'password']);
-        
         try {
+            await validateInput({ email, password }, ['email', 'password']);
+
             const authenticateUserUseCase = container.resolve(AuthenticateUserUseCase)
 
             const user = await authenticateUserUseCase.execute({

@@ -43,7 +43,7 @@ describe("ActivateUserCode", () => {
         expect(activateUser).toBeInstanceOf(UserCode)
         
         const validateUser = await userRepository.findById(activateUser.props.userId)
-        expect(validateUser.props.active).toBe(true)
+        expect(validateUser.props.account_activate_at.getTime()).toBeCloseTo(new Date().getTime(), -2);
     })
 
     it('should throw an error if user does not exists', async () => {
@@ -65,7 +65,7 @@ describe("ActivateUserCode", () => {
             code: "fake_code"
         })
 
-        await expect(activateCode).rejects.toBeInstanceOf(ErrInvalidParam)
+        await expect(activateCode).rejects.toBeInstanceOf(ErrExpired)
     })
 
     it('should throw an error if code expired', async () => {
@@ -100,7 +100,7 @@ describe("ActivateUserCode", () => {
             name: "Flaamer",
             email: "teste1@teste.com",
             password: "teste123",
-            active: true
+            account_activate_at: new Date()
         })
 
         const activateUser = sut.execute({

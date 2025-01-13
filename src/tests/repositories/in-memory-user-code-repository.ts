@@ -1,5 +1,5 @@
 import { IUserCodeRepository, FindByCode, FindByCodeAndUserId, FindCodeByUserId } from "@/modules/user/repositories";
-import { UserCode } from "@/modules/user/domain";
+import { TypesUserCode, UserCode } from "@/modules/user/domain";
 
 export class InMemoryUserCodeRepository implements IUserCodeRepository {
     public codes: UserCode[] = []
@@ -31,14 +31,14 @@ export class InMemoryUserCodeRepository implements IUserCodeRepository {
     }
 
     async findByUserId({userId, type}: FindCodeByUserId): Promise<UserCode> {
-        const data = this.codes.find((c)=>{
+        const codes = this.codes
+        .filter(c => {
             const isTypeMatch = type ? c.props.type === type : true;
-            return c.props.userId == userId && isTypeMatch
+            return c.props.userId === userId && isTypeMatch;
         })
+        .sort((a, b) => new Date(b.props.createdAt).getTime() - new Date(a.props.createdAt).getTime()); // Ordena por data
 
-        if(!data) return null;
-
-        return data;
+        return codes[0] || null; // Retorna o primeiro ou null se não encontrar
     }
 
     async changeCodeStatus(id: string): Promise<boolean> {
@@ -47,5 +47,12 @@ export class InMemoryUserCodeRepository implements IUserCodeRepository {
         const status = !data.props.active
         data.props.active = status
         return status;
+    }
+    async deleteAllUserCode(id: string, type: TypesUserCode): Promise<void> { 
+        this.codes.forEach(code=>{
+            if(code.props.userId == id && code.props.type == type) {
+                code.props.active = false;
+            }
+        })
     }
 }

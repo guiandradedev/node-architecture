@@ -7,7 +7,7 @@ type UserProps = {
     email: string,
     password: string,
     role: TypeUserRoles,
-    active: boolean,
+    account_activate_at: Date | null,
     createdAt: Date,
     updatedAt: Date
 }
