@@ -3,8 +3,12 @@ import { ISecurityAdapter } from "@/modules/user/adapters/security/ISecurityAdap
 import { JwtSecurityAdapter } from "@/modules/user/adapters/security/implementations/JwtSecurityAdapter";
 import { PrismaUserCodeRepository, PrismaUserRepository, PrismaUserTokenRepository } from "@/modules/user/infra/repositories/prisma";
 import { IUserTokenRepository, IUserRepository, IUserCodeRepository } from "@/modules/user/repositories";
+import { GoogleAuthProvider } from "@/modules/user/utils/SocialAuthProvider/GoogleAuthProvider";
+import { ISocialAuthProvider } from "@/modules/user/utils/SocialAuthProvider/ISocialAuthProvider";
 import { IMailAdapter, NodemailerMailAdapter } from "@/shared/adapters";
 import { container } from "tsyringe";
+
+container.register<ISocialAuthProvider>("GoogleAuthProvider", { useClass: GoogleAuthProvider });
 
 container.registerSingleton<IUserRepository>(
     "UserRepository",

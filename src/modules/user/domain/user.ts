@@ -5,11 +5,11 @@ export type TypeUserRoles = 'USER' | 'ADMIN'
 type UserProps = {
     name: string,
     email: string,
-    password: string,
+    password?: string,
     role: TypeUserRoles,
     account_activate_at: Date | null,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
 }
 
 export class User extends Entity<UserProps> {
