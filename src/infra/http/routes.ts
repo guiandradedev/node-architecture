@@ -11,10 +11,10 @@ export async function routes(app: FastifyTypedInstance) {
     //     return { message: 'User list' };
     // });
 
-    app.get('/auth/social-login', (request) => {
-        console.log(request.body)
-        return { status: 'ok' };
-    });
+    // app.get('/auth/social-login', (request) => {
+    //     console.log(request.body)
+    //     return { status: 'ok' };
+    // });
 
     app.register(authRoutes, { prefix: '/auth' });
 

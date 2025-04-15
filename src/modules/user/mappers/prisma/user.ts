@@ -1,5 +1,6 @@
 import { TypesUserCode, TypeUserRoles, User, UserCode, UserToken} from "@/modules/user/domain"
-import { User as prismaUser, UserCode as prismaUserCode, UserToken as prismaUserToken} from "@prisma/client"
+import { User as prismaUser, UserCode as prismaUserCode, UserToken as prismaUserToken, SocialAuth as prismaSocialAuth} from "@prisma/client"
+import { SocialAuth } from "../../domain/social-auth"
 
 const prismaUserToEntity = (u: prismaUser): User => {
     const user = User.create({
@@ -38,4 +39,16 @@ const prismaUserTokenToEntity = (u: prismaUserToken): UserToken => {
     return user
 }
 
-export { prismaUserToEntity, prismaUserCodeToEntity, prismaUserTokenToEntity }
+const prismaSocialAuthToEntity = (s: prismaSocialAuth): SocialAuth => {
+    const socialAuth = SocialAuth.create({
+        provider: s.provider as "Google", // Ajuste conforme os valores possíveis do tipo SocialAuthProvider
+        providerId: s.providerId,
+        userId: s.userId,
+        createdAt: s.createdAt,
+        updatedAt: s.updatedAt,
+    }, s.id);
+
+    return socialAuth;
+};
+
+export { prismaUserToEntity, prismaUserCodeToEntity, prismaUserTokenToEntity, prismaSocialAuthToEntity }

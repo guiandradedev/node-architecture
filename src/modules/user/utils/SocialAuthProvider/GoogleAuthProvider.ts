@@ -16,6 +16,8 @@ export class GoogleAuthProvider implements ISocialAuthProvider {
 
         if (!payload) return null;
 
+        console.log(payload)
+
         return {
             id: payload.sub,
             email: payload.email,

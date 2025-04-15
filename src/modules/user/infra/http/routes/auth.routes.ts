@@ -3,6 +3,7 @@ import { AuthenticateUserController } from '@/modules/user/services/authenticate
 import { CreateUserController } from '@/modules/user/services/createUser/createUserController'
 import { ForgotPasswordController } from '@/modules/user/services/forgotPassword';
 import { ResetPasswordController } from '@/modules/user/services/resetPassword';
+import { SocialAuthController } from '@/modules/user/services/socialAuth/socialAuthController';
 import { FastifyTypedInstance } from '@/types/fastify.types';
 
 export async function authRoutes(app: FastifyTypedInstance) {
@@ -24,5 +25,7 @@ export async function authRoutes(app: FastifyTypedInstance) {
     app.post('/activate', new ActivateUserController().handle)
     app.post('/forgot-password', new ForgotPasswordController().handle)
     app.post('/reset-password', new ResetPasswordController().handle)
+
+    app.post("/social-login", new SocialAuthController().handle);
 
 }

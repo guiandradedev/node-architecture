@@ -13,7 +13,7 @@ export class SocialAuthUseCase {
         @inject('UserRepository')
         private userRepository: IUserRepository,
 
-        @inject('UserRepository')
+        @inject('SocialAuthRepository')
         private socialAuthRepository: ISocialAuthRepository,
 
         @inject('SecurityAdapter')
@@ -30,6 +30,8 @@ export class SocialAuthUseCase {
         // 1. Validar token com o provedor correspondente
         const userData = await authProvider.validate(data.token);
         if (!userData) throw new Error("Invalid token");
+
+        console.log(userData)
 
         // 2. Buscar usuário pelo providerId
         let socialAuth = await this.socialAuthRepository.findByProvider(data.provider, userData.id);

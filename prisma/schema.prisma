@@ -14,14 +14,15 @@ model User {
   id                  String    @id
   name                String
   email               String    @unique
-  password            String
+  password            String?
   role                String
   createdAt           DateTime
   updatedAt           DateTime
   account_activate_at DateTime?
 
-  userToken UserToken[]
-  userCode  UserCode[]
+  userToken   UserToken[]
+  userCode    UserCode[]
+  socialAuths SocialAuth[]
 
   @@map("user")
 }
@@ -47,4 +48,18 @@ model UserCode {
   userId    String
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model SocialAuth {
+  id         String   @id @default(cuid()) // ID único gerado automaticamente
+  provider   String // Representa o SocialAuthProvider (ex.: "Google")
+  providerId String // ID do provedor (ex.: ID do Google)
+  userId     String // ID do usuário associado
+  createdAt  DateTime @default(now()) // Data de criação
+  updatedAt  DateTime @updatedAt // Atualizado automaticamente na modificação
+
+  // Relacionamento com o modelo User (se existir)
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([provider, providerId], name: "provider_providerId_idx") // Índice para buscas rápidas
 }

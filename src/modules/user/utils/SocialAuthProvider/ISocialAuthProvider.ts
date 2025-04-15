@@ -1,5 +1,3 @@
-import { User } from "../../domain";
-
 export type SocialAuthValidateDTO = {
   id: string;
   email: string; 

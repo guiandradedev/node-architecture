@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
-import { ActivateUserRequest } from "@/modules/user/protocols";
+import { ActivateUserRequest, SocialAuthRequest } from "@/modules/user/protocols";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import { SocialAuthUseCase } from "./socialAuthUseCase";
@@ -8,16 +8,16 @@ import { SocialAuthUseCase } from "./socialAuthUseCase";
 export class SocialAuthController {
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
-        const {code, userId} = request.body as ActivateUserRequest
+        const {token, provider} = request.body as SocialAuthRequest
 
         try {
-            await validateInput({ code, userId }, ['code', 'userId']);
+            await validateInput({ token, provider }, ['token', 'provider']);
 
             const socialLoginUseCase = container.resolve(SocialAuthUseCase)
 
             await socialLoginUseCase.execute({
-                provider: "Google",
-                token: ""
+                provider,
+                token
             })
 
             return reply.status(200).send({data: 'Account activated!'});
@@ -25,6 +25,7 @@ export class SocialAuthController {
             if(error instanceof AppError) {
                 return reply.status(error.status).send({ errors: [error] })
             }
+            console.log(error)
             return reply.status(500).send({ errors: [new ErrServerError()] })
         }
     }
