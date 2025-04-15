@@ -4,6 +4,7 @@ import { ActivateUserRequest, SocialAuthRequest } from "@/modules/user/protocols
 import { FastifyReply, FastifyRequest } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import { SocialAuthUseCase } from "./socialAuthUseCase";
+import { userTokenResponse } from "@/shared/helpers";
 
 export class SocialAuthController {
 
@@ -15,12 +16,12 @@ export class SocialAuthController {
 
             const socialLoginUseCase = container.resolve(SocialAuthUseCase)
 
-            await socialLoginUseCase.execute({
+            const user = await socialLoginUseCase.execute({
                 provider,
                 token
             })
 
-            return reply.status(200).send({data: 'Account activated!'});
+            return reply.status(200).send({data: userTokenResponse(user)});
         } catch (error) {
             if(error instanceof AppError) {
                 return reply.status(error.status).send({ errors: [error] })
