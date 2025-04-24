@@ -17,5 +17,4 @@ export async function routes(app: FastifyTypedInstance) {
     // });
 
     app.register(authRoutes, { prefix: '/auth' });
-
 }

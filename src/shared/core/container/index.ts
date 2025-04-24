@@ -7,6 +7,7 @@ import { IUserTokenRepository, IUserRepository, IUserCodeRepository, ISocialAuth
 import { GoogleAuthProvider } from "@/modules/user/utils/SocialAuthProvider/GoogleAuthProvider";
 import { ISocialAuthProvider } from "@/modules/user/utils/SocialAuthProvider/ISocialAuthProvider";
 import { IMailAdapter, NodemailerMailAdapter } from "@/shared/adapters";
+import { IPaymentAdapter, StripeCheckoutPaymentAdapter } from "@/shared/adapters/PaymentAdapter";
 import { container } from "tsyringe";
 
 container.register<ISocialAuthProvider>("GoogleAuthProvider", { useClass: GoogleAuthProvider });
@@ -44,4 +45,9 @@ const nodemaileradapter = new NodemailerMailAdapter()
 container.registerInstance<IMailAdapter>(
     "MailAdapter",
     nodemaileradapter
+)
+const stripecheckout_adapter = new StripeCheckoutPaymentAdapter()
+container.registerInstance<IPaymentAdapter>(
+    "PaymentAdapter",
+    stripecheckout_adapter
 )
