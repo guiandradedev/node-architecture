@@ -1,14 +1,17 @@
 import { CreatePaymentRequest, CreatePaymentResponse } from "./dtos/create-payment"
 
 export interface Item {
-    id: string | number,
     name: string,
     description: string,
     unit_price: number
 }
 
+export interface DatabaseItem extends Item{
+    id: string | number,
+}
+
 export interface ItemBought {
-    item: Item,
+    item: Item | DatabaseItem,
     quantity: number,
 }
 
