@@ -17,6 +17,7 @@ declare global {
       MAIL_PORT: string,
       MAIL_USER: string,
       MAIL_PASSWORD: string
+      STRIPE_SECRET_KEY: string
     }
   }
 }
