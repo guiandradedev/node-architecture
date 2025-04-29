@@ -23,11 +23,11 @@ export class StripeCheckoutPaymentAdapter extends Stripe implements IPaymentAdap
     
     private buildRedirectUrls(redirects: CreatePaymentRequest["redirects"]) {
         const success_url = typeof redirects === "string"
-            ? `${redirects}/complete?session_id={CHECKOUT_SESSION_ID}`
+            ? `${redirects}/checkout/complete?session_id={CHECKOUT_SESSION_ID}`
             : `${redirects.success}?session_id={CHECKOUT_SESSION_ID}`;
     
         const cancel_url = typeof redirects === "string"
-            ? `${redirects}/cancel?session_id={CHECKOUT_SESSION_ID}`
+            ? `${redirects}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`
             : `${redirects.cancel}?session_id={CHECKOUT_SESSION_ID}`;
     
         return { success_url, cancel_url };

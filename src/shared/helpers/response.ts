@@ -19,10 +19,10 @@ export const userResponse = (user: User): ResponseAdapter => {
         attributes: {
             name: user.props.name,
             email: user.props.email,
-            cpf: user.props.cpf,
             role: user.props.role,
-            active: user.props.active,
-            createdAt: user.props.createdAt
+            createdAt: user.props.createdAt,
+            updatedAt: user.props.updatedAt,
+            account_activate_at: user.props.account_activate_at,
         },
         links: {
             self: "/api/user/"+user.id
@@ -36,10 +36,10 @@ export const userTokenResponse = (user: UserAuthenticateResponse): ResponseAdapt
         attributes: {
             name: user.props.name,
             email: user.props.email,
-            cpf: user.props.cpf,
             role: user.props.role,
-            active: user.props.active,
-            createdAt: user.props.createdAt
+            createdAt: user.props.createdAt,
+            updatedAt: user.props.updatedAt,
+            account_activate_at: user.props.account_activate_at,
         },
         links: {
             self: "/api/user/"+user.id
