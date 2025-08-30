@@ -1,12 +1,15 @@
 import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
-import { ActivateUserRequest, SocialAuthRequest } from "@/modules/user/protocols";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { ActivateUserRequest, SocialAuthRequest, successAuthenticateUserResponse } from "@/modules/user/protocols";
+import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import { SocialAuthUseCase } from "./socialAuthUseCase";
 import { userTokenResponse } from "@/shared/helpers";
+import { IController } from "@/types/services.types";
+import z from "zod";
+import { socialAuthProviders } from "../../domain/social-auth";
 
-export class SocialAuthController {
+export class SocialAuthController implements IController{
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const {token, provider} = request.body as SocialAuthRequest
@@ -29,5 +32,27 @@ export class SocialAuthController {
             console.log(error)
             return reply.status(500).send({ errors: [new ErrServerError()] })
         }
+    }
+    public getProperties(): RouteShorthandOptions {
+        return {
+            schema: this.getSchema(),
+        };
+    }
+
+    private getSchema(): FastifySchema {
+        const authenticateUserBody = z.object({
+            token: z.string().describe("Token from the social provider"),
+            provider: z.enum(socialAuthProviders).describe("Social provider"),
+        });
+    
+        return {
+            description: "Authenticate a user with a social provider",
+            tags: ["Auth"],
+            summary: "Authenticates a user and returns a token",
+            body: authenticateUserBody,
+            response: {
+                200: successAuthenticateUserResponse,
+            },
+        };
     }
 };

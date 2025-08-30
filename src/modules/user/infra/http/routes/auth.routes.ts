@@ -7,25 +7,21 @@ import { SocialAuthController } from '@/modules/user/services/socialAuth/socialA
 import { FastifyTypedInstance } from '@/types/fastify.types';
 
 export async function authRoutes(app: FastifyTypedInstance) {
-    // app.get('/users', {
-    //     schema: {
-    //         tags: ['users'],
-    //         description: "asdsadas"
-    //     }
-    // }, () => {
-    //     return { message: 'User list' };
-    // });
+    const createUserController = new CreateUserController()
+    app.post('/', createUserController.getProperties(), createUserController.handle)
 
-    // app.get('/status', () => {
-    //     return { status: 'ok' };
-    // });
+    const authenticateUserController = new AuthenticateUserController()
+    app.post('/login', authenticateUserController.getProperties(), authenticateUserController.handle)
 
-    app.post('/', new CreateUserController().handle)
-    app.post('/login', new AuthenticateUserController().handle)
-    app.post('/activate', new ActivateUserController().handle)
-    app.post('/forgot-password', new ForgotPasswordController().handle)
-    app.post('/reset-password', new ResetPasswordController().handle)
+    const activateUserController = new ActivateUserController()
+    app.post('/activate', activateUserController.getProperties(), activateUserController.handle)
 
-    app.post("/social-login", new SocialAuthController().handle);
+    const forgotPasswordController = new ForgotPasswordController()
+    app.post('/forgot-password', forgotPasswordController.getProperties(), forgotPasswordController.handle)
 
+    const resetPasswordController = new ResetPasswordController()
+    app.post('/reset-password', resetPasswordController.getProperties(), resetPasswordController.handle)
+
+    const socialAuthController = new SocialAuthController()
+    app.post("/social-login", socialAuthController.getProperties(), socialAuthController.handle);
 }

@@ -1,6 +1,8 @@
 import { Entity } from "@/shared/core/entity";
 
-export type SocialAuthProvider = "Google"
+export const socialAuthProviders = ['Google'] as const;
+
+export type SocialAuthProvider = typeof socialAuthProviders[number];
 
 type SocialAuthProps = {
     provider: SocialAuthProvider,

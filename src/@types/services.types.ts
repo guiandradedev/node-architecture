@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply, RouteShorthandOptions } from 'fastify';
 
 export interface IController {
     handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply>;
-    // getSchema(): RouteShorthandOptions;
+    getProperties(): RouteShorthandOptions;
 }
 
 export interface UseCaseRequest {}

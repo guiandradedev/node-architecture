@@ -2,10 +2,12 @@ import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { ResetPasswordUseCase } from "./resetPasswordUseCase";
 import { ResetPasswordRequest } from "@/modules/user//protocols";
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
+import { IController } from "@/types/services.types";
+import z from "zod";
 
-export class ResetPasswordController {
+export class ResetPasswordController implements IController{
 
     async handle(request: FastifyRequest, reply: FastifyReply): Promise<FastifyReply> {
         const {code, confirmPassword, password, email} = request.body as ResetPasswordRequest
@@ -33,5 +35,32 @@ export class ResetPasswordController {
             console.log(error)
             return reply.status(500).send({ errors: [new ErrServerError()] })
         }
+    }
+
+    public getProperties(): RouteShorthandOptions {
+        return {
+            schema: this.getSchema(),
+        };
+    }
+
+    private getSchema(): FastifySchema {
+        const resetPasswordBody = z.object({
+            email: z.string().email(),
+            password: z.string().min(6),
+            confirmPassword: z.string().min(6),
+            code: z.string(),
+        });
+    
+        return {
+            description: "Change password",
+            tags: ["Auth"],
+            summary: "Change password",
+            body: resetPasswordBody,
+            response: {
+              200: z.object({
+                    data: z.string().describe("Success message"),
+                }).describe("Success response"),
+            },
+        };
     }
 };
