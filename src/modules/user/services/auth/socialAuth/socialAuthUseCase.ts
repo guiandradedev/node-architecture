@@ -1,6 +1,6 @@
 import { container, inject, injectable } from "tsyringe";
-import { ISocialAuthRepository, IUserRepository, IUserTokenRepository } from "@/modules/user/repositories";
-import { User, UserToken } from "@/modules/user/domain";
+import { ISocialAuthRepository, IUserRepository } from "@/modules/user/repositories";
+import { User } from "@/modules/user/domain";
 import { SocialAuthRequest, SocialAuthResponse, UserAuthenticateResponse, UserTokenResponse } from "@/modules/user/protocols/services";
 import { ISocialAuthProvider } from "../../../utils/SocialAuthProvider/ISocialAuthProvider";
 import { SocialAuth } from "../../../domain/social-auth";
@@ -18,9 +18,6 @@ export class SocialAuthUseCase {
 
         @inject('SecurityAdapter')
         private securityAdapter: ISecurityAdapter,
-
-        @inject('UserTokenRepository')
-        private UserTokenRepository: IUserTokenRepository,
     ) { }
 
     
@@ -59,14 +56,6 @@ export class SocialAuthUseCase {
         // 5. Retornar token JWT do usuário
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken, refreshToken } = await sessionService.execute({ email: user.props.email, id: user.id })
-
-        // const userToken = UserToken.create({
-        //     createdAt: new Date(),
-        //     refreshTokenExpiresDate,
-        //     refreshToken,
-        //     userId: user.id
-        // })
-        // await this.UserTokenRepository.create(userToken)
 
         const tokenData: UserTokenResponse = {
             accessToken: accessToken,

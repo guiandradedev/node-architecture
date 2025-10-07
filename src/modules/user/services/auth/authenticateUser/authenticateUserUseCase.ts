@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { IHashAdapter } from "@/modules/user/adapters/hash";
 import { ISecurityAdapter } from "@/modules/user/adapters/security/ISecurityAdapter";
-import { UserToken, User } from "@/modules/user/domain";
+import { User } from "@/modules/user/domain";
 import { AuthenticateUserRequest, UserAuthenticateResponse, UserTokenResponse } from "@/modules/user/protocols/services/auth/authenticateUserDTO";
-import { IUserTokenRepository, IUserRepository } from "@/modules/user/repositories";
+import { IUserRepository } from "@/modules/user/repositories";
 import { CreateSession } from "@/modules/user/utils/Session/SessionService";
 import { ErrInvalidParam, ErrNotActive } from "@/shared/errors";
 
@@ -12,9 +12,6 @@ export class AuthenticateUserUseCase {
     constructor(
         @inject('UserRepository')
         private userRepository: IUserRepository,
-
-        @inject('UserTokenRepository')
-        private UserTokenRepository: IUserTokenRepository,
 
         @inject('HashAdapter')
         private hashAdapter: IHashAdapter,
@@ -37,14 +34,6 @@ export class AuthenticateUserUseCase {
 
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken, refreshToken } = await sessionService.execute({ email, id: user.id })
-
-        // const userToken = UserToken.create({
-        //     createdAt: new Date(),
-        //     refreshTokenExpiresDate,
-        //     refreshToken,
-        //     userId: user.id
-        // })
-        // await this.UserTokenRepository.create(userToken)
 
         const tokenData: UserTokenResponse = {
             accessToken: accessToken,

@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest'
 import { UserCode } from '@/modules/user/domain'
 import { ErrNotActive, ErrNotFound } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
+import { InMemoryUserCodeRepository, InMemoryUserRepository } from '@/tests/repositories'
 import { CreateUserUseCase } from '@/modules/user/services'
 import { ForgotPasswordUseCase } from './forgotPasswordUseCase'
 
@@ -13,10 +13,9 @@ describe('Forgot Password', () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
         const userRepository = new InMemoryUserRepository()
-        const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
-        const userAdapter = new CreateUserUseCase(userRepository, userTokenRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
+        const userAdapter = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
         
         const user = await userAdapter.execute({
             name: "Flaamer",

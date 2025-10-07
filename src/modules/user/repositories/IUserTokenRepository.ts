@@ -1,6 +1,6 @@
-import { UserToken } from "@/modules/user/domain";
+import { UserToken, UserTokenTypes } from "@/modules/user/domain";
 
 export interface IUserTokenRepository {
     create(data: UserToken): Promise<void>;
-    findByToken(refreshToken: string): Promise<UserToken>;
+    findByToken(type: UserTokenTypes, token: string): Promise<UserToken>;
 }

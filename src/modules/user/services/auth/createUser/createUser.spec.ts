@@ -2,11 +2,10 @@ import 'dotenv/config'
 import 'reflect-metadata'
 import { describe, it, expect } from 'vitest'
 import { CreateUserUseCase } from './createUserUseCase'
-import { User, UserToken } from '@/modules/user/domain'
+import { User } from '@/modules/user/domain'
 import { ErrAlreadyExists, ErrInvalidParam } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
-import { UserTokenResponse } from '@/modules/user/protocols/services'
+import { InMemoryUserCodeRepository, InMemoryUserRepository } from '@/tests/repositories'
 import { SecurityDecryptResponse } from '@/modules/user/adapters'
 
 describe('Create User', () => {
@@ -15,12 +14,11 @@ describe('Create User', () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
         const userRepository = new InMemoryUserRepository()
-        const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
-        const sut = new CreateUserUseCase(userRepository, userTokenRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
+        const sut = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
 
-        return { userRepository, sut, userTokenRepository, securityAdapter, hashAdapter, userCodeRepository }
+        return { userRepository, sut, securityAdapter, hashAdapter, userCodeRepository }
     }
 
     it('should create an user', async () => {
@@ -68,18 +66,12 @@ describe('Create User', () => {
     });
 
     it('should return an access and refresh token valids', async () => {
-        const { sut, securityAdapter, userTokenRepository } = makeSut();
+        const { sut, securityAdapter } = makeSut();
 
         const user = await sut.execute({
             email: "flaamer@gmail.com",
             name: "flaamer",
             password: "teste123",
-        })
-
-        await expect(userTokenRepository.findByToken(user.token.refreshToken)).resolves.toBeInstanceOf(UserToken)
-        expect(user.token).toMatchObject<UserTokenResponse>({
-            accessToken: expect.any(String),
-            refreshToken: expect.any(String)
         })
 
         const verifyAccess = await securityAdapter.decrypt(user.token.accessToken, process.env.ACCESS_TOKEN)
@@ -88,6 +80,7 @@ describe('Create User', () => {
             expiresIn: expect.any(Date),
             issuedAt: expect.any(Date),
             subject: user.id,
+            payload: expect.anything()
             // payload: {
             //     id: user.id,
             //     email: user.props.email,

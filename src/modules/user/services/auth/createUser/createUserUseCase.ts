@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { User, UserToken } from "@/modules/user/domain";
+import { User } from "@/modules/user/domain";
 import { IHashAdapter, ISecurityAdapter } from "@/modules/user/adapters";
 import { CreateUserRequest, UserAuthenticateResponse } from "@/modules/user/protocols/services";
-import { IUserCodeRepository, IUserRepository, IUserTokenRepository } from "@/modules/user/repositories";
+import { IUserCodeRepository, IUserRepository } from "@/modules/user/repositories";
 import { ErrAlreadyExists, ErrInvalidParam } from "@/shared/errors";
 import { isValidEmail } from "@/shared/utils";
 import { CreateSession } from "@/modules/user/utils/Session/SessionService";
@@ -15,8 +15,6 @@ export class CreateUserUseCase implements IUseCase{
     constructor(
         @inject('UserRepository')
         private readonly userRepository: IUserRepository,
-        @inject('UserTokenRepository')
-        private userTokenRepository: IUserTokenRepository,
         @inject('UserCodeRepository')
         private UserCodeRepository: IUserCodeRepository,
         @inject('HashAdapter')
@@ -51,14 +49,6 @@ export class CreateUserUseCase implements IUseCase{
 
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken, refreshToken } = await sessionService.execute({email, id: user.id })
-
-        // const userToken = UserToken.create({
-        //     createdAt: new Date(),
-        //     refreshTokenExpiresDate,
-        //     refreshToken,
-        //     userId: user.id
-        // })
-        // await this.userTokenRepository.create(userToken)
 
         const newUserInstance = User.create({ ...user.props }, user.id)
 

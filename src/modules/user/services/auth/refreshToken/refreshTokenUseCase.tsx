@@ -34,8 +34,9 @@ export class RefreshTokenUseCase implements IUseCase {
 
         const userToken = UserToken.create({
             createdAt: new Date(),
-            refreshTokenExpiresDate,
-            refreshToken,
+            type: "refresh",
+            token: refreshToken,
+            expiresIn: payload.expiresIn,
             userId: user.id
         })
         await this.UserTokenRepository.create(userToken)

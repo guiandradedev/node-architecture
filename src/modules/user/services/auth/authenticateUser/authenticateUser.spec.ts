@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest'
 import { User } from '@/modules/user/domain'
 import { ErrInvalidParam, ErrNotActive } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
+import { InMemoryUserCodeRepository, InMemoryUserRepository } from '@/tests/repositories'
 import { CreateUserUseCase, AuthenticateUserUseCase } from '@/modules/user/services'
 import { UserTokenResponse } from '@/modules/user/protocols/services'
 import { SecurityDecryptResponse } from '@/modules/user/adapters'
@@ -14,16 +14,14 @@ describe('Authentication', async () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
         const userRepository = new InMemoryUserRepository()
-        const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
-        const userAdapter = new CreateUserUseCase(userRepository, userTokenRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
+        const userAdapter = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
         
-        const sut = new AuthenticateUserUseCase(userRepository, userTokenRepository, hashAdapter, securityAdapter)
+        const sut = new AuthenticateUserUseCase(userRepository, hashAdapter, securityAdapter)
 
         return {
             userRepository,
-            userTokenRepository,
             hashAdapter,
             mailAdapter,
             securityAdapter,

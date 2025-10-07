@@ -1,8 +1,11 @@
 import { Entity } from "@/shared/core/entity";
 
+export type UserTokenTypes = "access" | "refresh"
+
 type UserTokenProps = {
-    refreshToken: string,
-    refreshTokenExpiresDate: Date,
+    token: string,
+    expiresIn: Date,
+    type: UserTokenTypes,
     createdAt: Date,
     userId: string
 }

@@ -4,7 +4,7 @@ import { describe, it, expect, vitest } from 'vitest'
 import { UserCode } from '@/modules/user/domain'
 import { ErrAlreadyActive, ErrInvalidParam, ErrNotFound } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
+import { InMemoryUserCodeRepository, InMemoryUserRepository } from '@/tests/repositories'
 import { CreateUserUseCase } from '@/modules/user/services'
 import { ActivateUserUseCase } from './activateUserUseCase'
 import { GenerateUserCode } from '../../../utils'
@@ -15,10 +15,9 @@ describe("ActivateUserCode", () => {
         const mailAdapter = new InMemoryMailAdapter()
         const securityAdapter = new InMemorySecurityAdapter()
         const userRepository = new InMemoryUserRepository()
-        const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
-        const sutUser = new CreateUserUseCase(userRepository, userTokenRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
+        const sutUser = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
        
         const user = await sutUser.execute({
             name: "Flaamer",

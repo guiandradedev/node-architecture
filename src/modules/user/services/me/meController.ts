@@ -2,7 +2,7 @@ import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError, ErrUnauthorized } from "@/shared/errors";
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
-import { userResponse, userTokenResponse } from "@/shared/helpers";
+import { userResponse } from "@/shared/helpers";
 import { IController } from "@/types/services.types";
 import z from "zod";
 

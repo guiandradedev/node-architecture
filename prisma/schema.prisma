@@ -20,22 +20,10 @@ model User {
   updatedAt           DateTime
   account_activate_at DateTime?
 
-  userToken   UserToken[]
   userCode    UserCode[]
   socialAuths SocialAuth[]
 
   @@map("user")
-}
-
-model UserToken {
-  id                      String   @id
-  refreshToken            String
-  refreshTokenExpiresDate DateTime
-  createdAt               DateTime
-  user                    User     @relation(fields: [userId], references: [id])
-  userId                  String
-
-  @@map("userToken")
 }
 
 model UserCode {

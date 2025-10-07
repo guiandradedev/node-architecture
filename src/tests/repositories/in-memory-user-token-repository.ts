@@ -1,4 +1,4 @@
-import { UserToken } from "@/modules/user/domain";
+import { UserToken, UserTokenTypes } from "@/modules/user/domain";
 import { IUserTokenRepository } from "@/modules/user/repositories";
 
 export class InMemoryUserTokenRepository implements IUserTokenRepository {
@@ -8,8 +8,8 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
         this.tokens.push(data)
     }
 
-    async findByToken(refreshToken: string): Promise<UserToken> {
-        return this.tokens.find(token=> token.props.refreshToken == refreshToken) ?? null;
+    async findByToken(type: UserTokenTypes, token: string): Promise<UserToken> {
+        return this.tokens.find(t=> t.props.token == token) ?? null;
     }
 
 }

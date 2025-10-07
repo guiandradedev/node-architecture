@@ -4,17 +4,18 @@ import { prismaUserTokenToEntity } from "@/modules/user/mappers/prisma";
 import { IUserTokenRepository } from "@/modules/user/repositories";
 
 
-export class PrismaUserTokenRepository implements IUserTokenRepository {
+export class RedisUserTokenRepository implements IUserTokenRepository {
     async findByToken(refreshToken: string): Promise<UserToken> {
-        const token = await prismaClient.userToken.findFirst({
-            where: {
-                refreshToken
-            }
-        })
-        if(!token) return null;
-        return prismaUserTokenToEntity(token);
+        // const token = await prismaClient.userToken.findFirst({
+        //     where: {
+        //         refreshToken
+        //     }
+        // })
+        // if(!token) return null;
+        // return prismaUserTokenToEntity(token);
+        throw new Error()
     }
     async create(data: UserToken): Promise<void> {
-        await prismaClient.userToken.create({ data: { ...data.props, id: data.id } })
+        throw new Error()
     }
 }

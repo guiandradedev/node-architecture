@@ -1,7 +1,8 @@
 import { BcryptHashAdapter, IHashAdapter } from "@/modules/user/adapters/hash";
 import { ISecurityAdapter } from "@/modules/user/adapters/security/ISecurityAdapter";
 import { JwtSecurityAdapter } from "@/modules/user/adapters/security/implementations/JwtSecurityAdapter";
-import { PrismaUserCodeRepository, PrismaUserRepository, PrismaUserTokenRepository } from "@/modules/user/infra/repositories/prisma";
+import { RedisUserTokenRepository } from "@/modules/user/infra/repositories";
+import { PrismaUserCodeRepository, PrismaUserRepository } from "@/modules/user/infra/repositories/prisma";
 import { PrismaSocialAuthRepository } from "@/modules/user/infra/repositories/prisma/PrismaSocialAuthRepository";
 import { IUserTokenRepository, IUserRepository, IUserCodeRepository, ISocialAuthRepository } from "@/modules/user/repositories";
 import { GoogleAuthProvider } from "@/modules/user/utils/SocialAuthProvider/GoogleAuthProvider";
@@ -24,7 +25,7 @@ container.registerInstance<IHashAdapter>(
 
 container.registerSingleton<IUserTokenRepository>(
     "UserTokenRepository",
-    PrismaUserTokenRepository
+    RedisUserTokenRepository
 )
 container.registerSingleton<ISocialAuthRepository>(
     "SocialAuthRepository",
