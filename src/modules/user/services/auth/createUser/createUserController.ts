@@ -64,7 +64,7 @@ export class CreateUserController implements IController {
             summary: 'Creates a new user and returns user data',
             body: createUserBody,
             response: {
-                201: createUserResponse
+                // 201: createUserResponse
             }
 
         }

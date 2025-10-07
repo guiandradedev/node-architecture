@@ -13,8 +13,8 @@ export class JwtSecurityAdapter implements ISecurityAdapter {
         return {
             payload: { ...rest },
             subject: sub,
-            expiresIn: new Date(exp),
-            issuedAt: new Date(iat),
+            expiresIn: exp ? new Date(exp * 1000) : undefined,
+            issuedAt: iat ? new Date(iat * 1000) : undefined,
         }
     }
     async encrypt(data: any, secret: string, options: EncryptOptions): Promise<string> {
@@ -32,10 +32,9 @@ export class JwtSecurityAdapter implements ISecurityAdapter {
 
             return this.mapper(data)
         } catch (error) {
-            console.log(error)
             if (error instanceof Error) {
                 if (error.message === "jwt expired" || error.message === "invalid signature") {
-                    throw new ErrInvalidParam('token')
+                    throw new ErrInvalidParam('token expired')
                 }
                 if (error.message == 'jwt must be provided') {
                     throw new ErrMissingParam('token')
