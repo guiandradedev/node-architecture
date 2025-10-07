@@ -1,5 +1,5 @@
 import { UseCaseRequest, UseCaseResponse } from "@/types/services.types"
-import { User } from "../domain"
+import { User } from "@/modules/user/domain"
 
 export interface ResetPasswordRequest extends UseCaseRequest {
     code: string,

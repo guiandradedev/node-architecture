@@ -4,7 +4,7 @@ export class ErrInvalidParam extends AppError {
     constructor(message: string) {
         super({
             message: `Invalid param: ${message}`,
-            status: 500,
+            status: 422,
             title: "ErrInvalidParam"
         })
     }

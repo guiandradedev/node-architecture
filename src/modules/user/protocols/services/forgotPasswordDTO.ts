@@ -1,5 +1,5 @@
 import { UseCaseRequest, UseCaseResponse } from "@/types/services.types";
-import { UserCode } from "../domain";
+import { UserCode } from "@/modules/user/domain";
 
 export interface ForgotPasswordRequest extends UseCaseRequest{
     email: string

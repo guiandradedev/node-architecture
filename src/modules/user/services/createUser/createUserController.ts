@@ -3,7 +3,7 @@ import { CreateUserUseCase } from "./createUserUseCase";
 import { AppError, ErrServerError } from "@/shared/errors";
 import { userResponse } from "@/shared/helpers/response";
 import { IController } from "@/types/services.types";
-import { CreateUserRequest } from "@/modules/user/protocols";
+import { CreateUserRequest } from "@/modules/user/protocols/services";
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import z from "zod";

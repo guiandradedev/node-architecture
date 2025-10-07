@@ -1,4 +1,4 @@
-import { authRoutes } from '@/modules/user/infra/http/routes';
+import { authRoutes, userRoutes } from '@/modules/user/infra/http/routes';
 import { FastifyTypedInstance } from '@/types/fastify.types';
 
 export async function routes(app: FastifyTypedInstance) {
@@ -17,4 +17,5 @@ export async function routes(app: FastifyTypedInstance) {
     // });
 
     app.register(authRoutes, { prefix: '/auth' });
+    app.register(userRoutes, { prefix: '/user' });
 }

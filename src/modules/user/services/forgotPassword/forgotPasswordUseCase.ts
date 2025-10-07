@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { ForgotPasswordRequest, ForgotPasswordResponse } from "@/modules/user/protocols";
+import { ForgotPasswordRequest, ForgotPasswordResponse } from "@/modules/user/protocols/services";
 import { IUserCodeRepository, IUserRepository } from "@/modules/user/repositories";
 import { ErrAlreadyActive, ErrNotActive, ErrNotFound } from "@/shared/errors";
 import { CreateUserCodeService } from "@/modules/user/utils/UserCode";

@@ -2,7 +2,7 @@ import { GenerateUserCode, TypeCode } from "./GenerateUserCode";
 import { UserCode } from "@/modules/user/domain";
 import { IUserCodeRepository, IUserRepository } from "@/modules/user/repositories";
 import { IMailAdapter } from "@/shared/adapters";
-import { GenerateUserDTO } from "@/modules/user/protocols";
+import { GenerateUserDTO } from "@/modules/user/protocols/services";
 import { SendUserMail } from "@/shared/helpers";
 
 export class CreateUserCodeService {

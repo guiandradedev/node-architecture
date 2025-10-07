@@ -10,6 +10,7 @@ import { fastifySwagger } from '@fastify/swagger';
 import { fastifySwaggerUi } from '@fastify/swagger-ui';
 import { routes } from './routes';
 import { AppError } from '@/shared/errors';
+import { ErrInternalServerError } from '@/shared/errors/ErrInternalServerError';
 
 export const app = fastify();
 
@@ -36,19 +37,12 @@ app.get('/', () => {
 });
 
 app.setErrorHandler((error, request, reply) => {
-    if (error instanceof AppError) {
-        return reply.status(error.status).send({
-            status: error.status,
-            title: error.title,
-            message: error.message,
-        });
+    let newError = error as unknown as AppError;
+    if (!(error instanceof AppError)) {
+        newError = new ErrInternalServerError(error.message)
     }
 
-    reply.status(500).send({
-        statusCode: 500,
-        error: "Internal Server Error",
-        message: error.message,
-    });
+    return reply.status(newError.status).send({ errors: [newError] });
 });
 
 

@@ -1,5 +1,5 @@
 import { UseCaseRequest } from "@/types/services.types"
-import { TypeUserRoles } from "../domain"
+import { TypeUserRoles } from "@/modules/user/domain"
 
 export interface CreateUserRequest extends UseCaseRequest {
     name: string,

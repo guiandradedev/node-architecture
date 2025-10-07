@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 import { AuthenticateUserUseCase } from "./authenticateUserUseCase";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
-import { AuthenticateUserRequest, successAuthenticateUserResponse } from "@/modules/user/protocols/authenticateUserDTO";
+import { AuthenticateUserRequest, successAuthenticateUserResponse } from "@/modules/user/protocols/services/authenticateUserDTO";
 import { userTokenResponse } from "@/shared/helpers/response";
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
@@ -41,7 +41,7 @@ export class AuthenticateUserController {
     private getSchema(): FastifySchema {
         const authenticateUserBody = z.object({
             email: z.string().email(),
-            password: z.string().min(6),
+            password: z.string(),
         });
     
         return {

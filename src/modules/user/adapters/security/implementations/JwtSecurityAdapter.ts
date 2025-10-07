@@ -18,6 +18,7 @@ export class JwtSecurityAdapter implements ISecurityAdapter {
         }
     }
     async encrypt(data: any, secret: string, options: EncryptOptions): Promise<string> {
+        if (!secret) throw new ErrMissingParam('secret')
         const opt: jwt.SignOptions = {
             expiresIn: new Date(options.expiresIn).getTime(),
             subject: options.subject
@@ -25,11 +26,13 @@ export class JwtSecurityAdapter implements ISecurityAdapter {
         return jwt.sign(data, secret, opt)
     }
     async decrypt(value: string, secret: string): Promise<SecurityDecryptResponse> {
+        if (!secret) throw new ErrMissingParam('secret')
         try {
             const data = jwt.verify(value, secret) as JwtPayload
 
             return this.mapper(data)
         } catch (error) {
+            console.log(error)
             if (error instanceof Error) {
                 if (error.message === "jwt expired" || error.message === "invalid signature") {
                     throw new ErrInvalidParam('token')

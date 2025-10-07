@@ -1,4 +1,4 @@
-import { SocialAuth, SocialAuthProvider } from "../domain/social-auth"
+import { SocialAuth, SocialAuthProvider } from "@/modules/user/domain/social-auth"
 
 export interface ISocialAuthRepository {
     create(data: SocialAuth): Promise<void>;

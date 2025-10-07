@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { User, UserToken } from "@/modules/user/domain";
 import { IHashAdapter, ISecurityAdapter } from "@/modules/user/adapters";
-import { CreateUserRequest, UserAuthenticateResponse } from "@/modules/user/protocols";
+import { CreateUserRequest, UserAuthenticateResponse } from "@/modules/user/protocols/services";
 import { IUserCodeRepository, IUserRepository, IUserTokenRepository } from "@/modules/user/repositories";
 import { ErrAlreadyExists, ErrInvalidParam } from "@/shared/errors";
 import { isValidEmail } from "@/shared/utils";

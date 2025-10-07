@@ -6,7 +6,7 @@ import { ErrInvalidParam, ErrNotActive } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
 import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
 import { CreateUserUseCase, AuthenticateUserUseCase } from '@/modules/user/services'
-import { UserTokenResponse } from '@/modules/user/protocols'
+import { UserTokenResponse } from '@/modules/user/protocols/services'
 import { SecurityDecryptResponse } from '@/modules/user/adapters'
 
 describe('Authentication', async () => {

@@ -1,5 +1,5 @@
 import { User } from "@/modules/user/domain"
-import { UserAuthenticateResponse } from "@/modules/user/protocols/authenticateUserDTO"
+import { UserAuthenticateResponse } from "@/modules/user/protocols/services/authenticateUserDTO"
 
 export interface ResponseAdapter {
     id: string,

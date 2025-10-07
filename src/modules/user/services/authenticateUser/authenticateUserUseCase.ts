@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { IHashAdapter } from "@/modules/user/adapters/hash";
 import { ISecurityAdapter } from "@/modules/user/adapters/security/ISecurityAdapter";
 import { UserToken, User } from "@/modules/user/domain";
-import { AuthenticateUserRequest, UserAuthenticateResponse, UserTokenResponse } from "@/modules/user/protocols/authenticateUserDTO";
+import { AuthenticateUserRequest, UserAuthenticateResponse, UserTokenResponse } from "@/modules/user/protocols/services/authenticateUserDTO";
 import { IUserTokenRepository, IUserRepository } from "@/modules/user/repositories";
 import { CreateSession } from "@/modules/user/utils/Session/SessionService";
 import { ErrInvalidParam, ErrNotActive } from "@/shared/errors";
@@ -27,6 +27,8 @@ export class AuthenticateUserUseCase {
         const user = await this.userRepository.findByEmail(email)
 
         if (!user) throw new ErrInvalidParam('email or password incorrect')
+
+        if(!user.props.password) throw new ErrInvalidParam("this account was created with a provider")
 
         const checkPassword = await this.hashAdapter.compare(password, user.props.password);
         if (!checkPassword) throw new ErrInvalidParam('email or password incorrect')

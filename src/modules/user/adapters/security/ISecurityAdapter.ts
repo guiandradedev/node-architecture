@@ -1,6 +1,6 @@
 export type SecurityDecryptResponse = {
     subject: string,
-    // payload: any,
+    payload: any,
     expiresIn: Date,
     issuedAt: Date,
 }

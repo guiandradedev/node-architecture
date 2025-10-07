@@ -1,7 +1,7 @@
 import { container, inject, injectable } from "tsyringe";
 import { ISocialAuthRepository, IUserRepository, IUserTokenRepository } from "@/modules/user/repositories";
 import { User, UserToken } from "@/modules/user/domain";
-import { SocialAuthRequest, SocialAuthResponse, UserAuthenticateResponse, UserTokenResponse } from "@/modules/user/protocols";
+import { SocialAuthRequest, SocialAuthResponse, UserAuthenticateResponse, UserTokenResponse } from "@/modules/user/protocols/services";
 import { ISocialAuthProvider } from "../../utils/SocialAuthProvider/ISocialAuthProvider";
 import { SocialAuth } from "../../domain/social-auth";
 import { CreateSession } from "../../utils";

@@ -3,7 +3,7 @@ import { IUserCodeRepository, IUserRepository } from "@/modules/user/repositorie
 import { ErrAlreadyActive, ErrInvalidParam, ErrNotFound } from "@/shared/errors";
 import { UserCode } from "@/modules/user/domain";
 import { ErrExpired } from "@/shared/errors/ErrExpired";
-import { ActivateUserRequest, ActivateUserResponse } from "@/modules/user/protocols";
+import { ActivateUserRequest, ActivateUserResponse } from "@/modules/user/protocols/services";
 import { IMailAdapter } from "@/shared/adapters";
 import { CreateUserCodeService } from "@/modules/user/utils";
 

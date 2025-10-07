@@ -1,6 +1,6 @@
 import { UseCaseRequest, UseCaseResponse } from "@/types/services.types"
-import { User } from "../domain"
-import { SocialAuthProvider } from "../domain/social-auth"
+import { User } from "@/modules/user/domain"
+import { SocialAuthProvider } from "@/modules/user/domain/social-auth"
 import { UserTokenResponse } from "./authenticateUserDTO"
 
 export interface SocialAuthRequest extends UseCaseRequest {

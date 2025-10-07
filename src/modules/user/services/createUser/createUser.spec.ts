@@ -6,7 +6,7 @@ import { User, UserToken } from '@/modules/user/domain'
 import { ErrAlreadyExists, ErrInvalidParam } from '@/shared/errors'
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
 import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
-import { UserTokenResponse } from '@/modules/user/protocols'
+import { UserTokenResponse } from '@/modules/user/protocols/services'
 import { SecurityDecryptResponse } from '@/modules/user/adapters'
 
 describe('Create User', () => {

@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 import { AppError, ErrServerError } from "@/shared/errors";
 import { ActivateUserUseCase } from "./activateUserUseCase";
-import { ActivateUserRequest } from "@/modules/user/protocols";
+import { ActivateUserRequest } from "@/modules/user/protocols/services";
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import { IController } from "@/types/services.types";

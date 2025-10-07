@@ -1,7 +1,7 @@
 import { container } from "tsyringe";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { ForgotPasswordUseCase } from "./forgotPasswordUseCase";
-import { ForgotPasswordRequest } from "@/modules/user/protocols";
+import { ForgotPasswordRequest } from "@/modules/user/protocols/services";
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import { IController } from "@/types/services.types";
