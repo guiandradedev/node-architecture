@@ -1,6 +1,6 @@
-import { UserToken, UserTokenTypes } from "@/modules/user/domain";
+import { UserToken } from "@/modules/user/domain";
 
 export interface IUserTokenRepository {
+    isTokenBlacklisted(token: string): Promise<boolean>;
     create(data: UserToken): Promise<void>;
-    findByToken(type: UserTokenTypes, token: string): Promise<UserToken>;
 }

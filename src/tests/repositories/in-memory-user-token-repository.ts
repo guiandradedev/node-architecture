@@ -1,4 +1,4 @@
-import { UserToken, UserTokenTypes } from "@/modules/user/domain";
+import { UserToken } from "@/modules/user/domain";
 import { IUserTokenRepository } from "@/modules/user/repositories";
 
 export class InMemoryUserTokenRepository implements IUserTokenRepository {
@@ -8,8 +8,8 @@ export class InMemoryUserTokenRepository implements IUserTokenRepository {
         this.tokens.push(data)
     }
 
-    async findByToken(type: UserTokenTypes, token: string): Promise<UserToken> {
-        return this.tokens.find(t=> t.props.token == token) ?? null;
+    async isTokenBlacklisted(token: string): Promise<boolean> {
+        return this.tokens.some(t => t.props.token === token);
     }
 
 }

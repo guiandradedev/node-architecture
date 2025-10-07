@@ -14,7 +14,7 @@ export class RefreshTokenUseCase implements IUseCase {
         private userRepository: IUserRepository,
 
         @inject('UserTokenRepository')
-        private UserTokenRepository: IUserTokenRepository,
+        private userTokenRepository: IUserTokenRepository,
 
         @inject('SecurityAdapter')
         private securityAdapter: ISecurityAdapter,
@@ -29,17 +29,18 @@ export class RefreshTokenUseCase implements IUseCase {
         const user = await this.userRepository.findById(payload.subject);
         if (!user) throw new ErrUnauthorized();
 
+        const isTokenInBlacklist = await this.userTokenRepository.isTokenBlacklisted(refreshToken);
+        if (isTokenInBlacklist) throw new ErrUnauthorized();
+
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken, refreshToken: refresh, refreshTokenExpiresDate, accessTokenExpiresDate } = await sessionService.execute({ email: user.props.email, id: user.id })
 
         const userToken = UserToken.create({
-            createdAt: new Date(),
-            type: "refresh",
             token: refreshToken,
             expiresIn: payload.expiresIn,
-            userId: user.id
         })
-        await this.UserTokenRepository.create(userToken)
+        
+        await this.userTokenRepository.create(userToken)
 
         return { accessToken, refreshToken: refresh, refreshTokenExpiresDate, accessTokenExpiresDate };
 

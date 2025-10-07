@@ -25,11 +25,11 @@ export class AuthenticateMiddlewareUseCase {
         const payload = await this.securityAdapter.decrypt(accessToken, process.env.ACCESS_TOKEN);
         if (!payload || !payload.subject) throw new ErrUnauthorized();
 
+        const isTokenInBlacklist = await this.userTokenRepository.isTokenBlacklisted(accessToken);
+        if (isTokenInBlacklist) throw new ErrUnauthorized();
+
         const user = await this.userRepository.findById(payload.subject);
         if (!user) throw new ErrUnauthorized();
-
-        // opcional: validar token contra userTokenRepository se usar blacklist/refresh tracking
-        // const tokenExists = await this.userTokenRepository.findByRefreshToken(...)
 
         return { user }
     }

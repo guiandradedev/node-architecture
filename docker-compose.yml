@@ -37,6 +37,8 @@ services:
 volumes:
     app_database:
         driver: local
+    redis:
+        driver: local
 networks:
     src_default:
         driver: bridge
