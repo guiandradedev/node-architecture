@@ -4,7 +4,7 @@ import { describe, expect, it, vitest } from "vitest";
 import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
 import { CreateUserCodeService } from './CreateUserCodeService';
 import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } from '@/tests/adapters'
-import { CreateUserUseCase } from '../../services/createUser/createUserUseCase';
+import { CreateUserUseCase } from '../../services/auth/createUser/createUserUseCase';
 
 describe("Create UserCode Service", async () => {
     

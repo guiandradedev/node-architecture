@@ -7,7 +7,7 @@ import { SocialAuthUseCase } from "./socialAuthUseCase";
 import { userTokenResponse } from "@/shared/helpers";
 import { IController } from "@/types/services.types";
 import z from "zod";
-import { socialAuthProviders } from "../../domain/social-auth";
+import { socialAuthProviders } from "../../../domain/social-auth";
 
 export class SocialAuthController implements IController{
 

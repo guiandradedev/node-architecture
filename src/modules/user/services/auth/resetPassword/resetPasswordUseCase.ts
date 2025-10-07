@@ -3,7 +3,7 @@ import { IUserCodeRepository, IUserRepository } from "@/modules/user/repositorie
 import { ErrInvalidParam, ErrNotFound } from "@/shared/errors";
 import { IMailAdapter } from "@/shared/adapters";
 import { IUseCase } from "@/types/services.types";
-import { IHashAdapter } from "../../adapters";
+import { IHashAdapter } from "../../../adapters";
 import { ResetPasswordRequest, ResetPasswordResponse } from "@/modules/user/protocols/services";
 import { ErrExpired } from "@/shared/errors/ErrExpired";
 import { SendUserMail } from "@/shared/helpers";

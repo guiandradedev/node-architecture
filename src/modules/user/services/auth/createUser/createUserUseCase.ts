@@ -50,15 +50,15 @@ export class CreateUserUseCase implements IUseCase{
         await this.userRepository.create(user)
 
         const sessionService = new CreateSession(this.securityAdapter)
-        const { accessToken, refreshToken, refreshTokenExpiresDate } = await sessionService.execute({email, id: user.id })
+        const { accessToken, refreshToken } = await sessionService.execute({email, id: user.id })
 
-        const userToken = UserToken.create({
-            createdAt: new Date(),
-            refreshTokenExpiresDate,
-            refreshToken,
-            userId: user.id
-        })
-        await this.userTokenRepository.create(userToken)
+        // const userToken = UserToken.create({
+        //     createdAt: new Date(),
+        //     refreshTokenExpiresDate,
+        //     refreshToken,
+        //     userId: user.id
+        // })
+        // await this.userTokenRepository.create(userToken)
 
         const newUserInstance = User.create({ ...user.props }, user.id)
 

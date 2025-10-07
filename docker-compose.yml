@@ -10,6 +10,8 @@ services:
             - 5432:5432
         volumes:
             - app_database:/var/lib/postgresql/data
+        networks:
+            - src_default
     mailpit:
       image: 'axllent/mailpit:latest'
       ports:
@@ -17,6 +19,21 @@ services:
           - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
       networks:
           - src_default
+    redis:
+        image: 'redis:alpine'
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'redis:/data'
+        networks:
+            - src_default
+        healthcheck:
+            test:
+                - CMD
+                - redis-cli
+                - ping
+            retries: 3
+            timeout: 5s
 volumes:
     app_database:
         driver: local

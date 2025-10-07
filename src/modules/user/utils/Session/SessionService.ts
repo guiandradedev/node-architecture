@@ -15,6 +15,7 @@ class CreateSession {
     constructor(
         private securityAdapter: ISecurityAdapter
     ) { }
+
     async execute({ email, id }: CreateSessionRequest): Promise<ITokens> {
         try {
             const userDataPayload = { id, email }

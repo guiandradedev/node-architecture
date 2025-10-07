@@ -7,7 +7,7 @@ import { InMemoryHashAdapter, InMemoryMailAdapter, InMemorySecurityAdapter } fro
 import { InMemoryUserCodeRepository, InMemoryUserRepository, InMemoryUserTokenRepository } from '@/tests/repositories'
 import { CreateUserUseCase } from '@/modules/user/services'
 import { ActivateUserUseCase } from './activateUserUseCase'
-import { GenerateUserCode } from '../../utils'
+import { GenerateUserCode } from '../../../utils'
 import { ErrExpired } from '@/shared/errors/ErrExpired'
 
 describe("ActivateUserCode", () => {

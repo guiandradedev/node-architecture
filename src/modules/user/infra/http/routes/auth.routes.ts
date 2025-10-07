@@ -1,9 +1,9 @@
-import { ActivateUserController } from '@/modules/user/services/activateUser/activateUserController';
-import { AuthenticateUserController } from '@/modules/user/services/authenticateUser/authenticateUserController'
-import { CreateUserController } from '@/modules/user/services/createUser/createUserController'
-import { ForgotPasswordController } from '@/modules/user/services/forgotPassword';
-import { ResetPasswordController } from '@/modules/user/services/resetPassword';
-import { SocialAuthController } from '@/modules/user/services/socialAuth/socialAuthController';
+import { ActivateUserController } from '@/modules/user/services/auth/activateUser/activateUserController';
+import { AuthenticateUserController } from '@/modules/user/services/auth/authenticateUser/authenticateUserController'
+import { CreateUserController } from '@/modules/user/services/auth/createUser/createUserController'
+import { ForgotPasswordController } from '@/modules/user/services/auth/forgotPassword';
+import { ResetPasswordController } from '@/modules/user/services/auth/resetPassword';
+import { SocialAuthController } from '@/modules/user/services/auth/socialAuth/socialAuthController';
 import { FastifyTypedInstance } from '@/types/fastify.types';
 
 export async function authRoutes(app: FastifyTypedInstance) {
