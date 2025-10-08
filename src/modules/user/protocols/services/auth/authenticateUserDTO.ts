@@ -13,24 +13,12 @@ export interface UserTokenResponse extends UseCaseResponse {
     refreshToken: string
 }
 
-export interface UserAuthenticateResponse extends User {
+export interface UserAuthenticateResponse {
     token: UserTokenResponse
 }
 
 export const successAuthenticateUserResponse = z.object({
   data: z.object({
-    id: z.string(),
-    attributes: z.object({
-      name: z.string(),
-      email: z.string().email(),
-      role: z.string(),
-      createdAt: z.date(),
-      updatedAt: z.date(),
-      account_activate_at: z.date().nullable(),
-    }),
-    links: z.object({
-      self: z.string(),
-    }),
     token: z.object({
       access_token: z.string(),
       refresh_token: z.string(),

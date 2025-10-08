@@ -40,9 +40,8 @@ export class AuthenticateUserUseCase {
             refreshToken: refreshToken
         }
 
-        const newUserInstance = User.create({...user.props}, user.id)
-        const userAuthenticated: UserAuthenticateResponse = Object.assign(newUserInstance, {token: tokenData})
-
-        return userAuthenticated;
+        return {
+            token: tokenData
+        };
     }
 }

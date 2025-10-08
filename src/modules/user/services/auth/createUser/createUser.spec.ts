@@ -24,13 +24,18 @@ describe('Create User', () => {
     it('should create an user', async () => {
         const { sut } = makeSut()
 
-        const user = await sut.execute({
+        const response = await sut.execute({
             name: "valid name",
             email: "valid_email@mail.com",
             password: "teste123"
         })
 
-        expect(user).toBeInstanceOf(User)
+        expect(response).toMatchObject({
+            token: {
+                accessToken: expect.any(String),
+                refreshToken: expect.any(String),
+            }
+        })
     })
 
     it('should not create another user (email)', async () => {
@@ -53,7 +58,7 @@ describe('Create User', () => {
 
     it('should not create user if email is invalid', async () => {
         const { sut } = makeSut();
-    
+
         const dataUser = {
             name: "valid name",
             email: "invalid_email",
@@ -61,7 +66,7 @@ describe('Create User', () => {
         };
 
         const response = sut.execute(dataUser);
-    
+
         await expect(response).rejects.toBeInstanceOf(ErrInvalidParam);
     });
 
@@ -79,13 +84,8 @@ describe('Create User', () => {
         expect(verifyAccess).toMatchObject<SecurityDecryptResponse>({
             expiresIn: expect.any(Date),
             issuedAt: expect.any(Date),
-            subject: user.id,
-            payload: expect.anything()
-            // payload: {
-            //     id: user.id,
-            //     email: user.props.email,
-            //     role: user.props.role
-            // }
+            subject: expect.any(String), // nao tenho acesso ao id do user aqui
+            payload: expect.any(Object)
         })
     })
 })

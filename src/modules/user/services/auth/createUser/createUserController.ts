@@ -17,9 +17,9 @@ export class CreateUserController implements IController {
             await validateInput({ name, email, password }, ['name', 'email', 'password']);
 
             const createUserUseCase = container.resolve(CreateUserUseCase);
-            const user = await createUserUseCase.execute({ name, email, password });
+            const tokens = await createUserUseCase.execute({ name, email, password });
 
-            return reply.status(201).send({ data: userResponse(user) });
+            return reply.status(201).send({ data: tokens });
         } catch (error) {
             console.error(error);
             if (error instanceof AppError) {

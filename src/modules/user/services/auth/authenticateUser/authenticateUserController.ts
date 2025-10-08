@@ -2,7 +2,6 @@ import { container } from "tsyringe";
 import { AuthenticateUserUseCase } from "./authenticateUserUseCase";
 import { AppError, ErrInvalidParam, ErrServerError } from "@/shared/errors";
 import { AuthenticateUserRequest, successAuthenticateUserResponse } from "@/modules/user/protocols/services/auth/authenticateUserDTO";
-import { userTokenResponse } from "@/shared/helpers/response";
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import z from "zod";
@@ -17,12 +16,12 @@ export class AuthenticateUserController {
 
             const authenticateUserUseCase = container.resolve(AuthenticateUserUseCase)
 
-            const user = await authenticateUserUseCase.execute({
+            const tokens = await authenticateUserUseCase.execute({
                 email,
                 password
             })
 
-            return reply.status(200).send({data: userTokenResponse(user)});
+            return reply.status(200).send({data: tokens});
         } catch (error) {
             if(error instanceof AppError) {
                 return reply.status(error.status).send({ errors: [error] })
@@ -50,7 +49,7 @@ export class AuthenticateUserController {
             summary: "Authenticates a user and returns a token",
             body: authenticateUserBody,
             response: {
-                200: successAuthenticateUserResponse,
+                // 200: successAuthenticateUserResponse,
             },
         };
     }

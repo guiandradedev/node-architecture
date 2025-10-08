@@ -17,23 +17,26 @@ describe('Forgot Password', () => {
         const hashAdapter = new InMemoryHashAdapter()
         const userAdapter = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
         
-        const user = await userAdapter.execute({
+        const data = {
             name: "Flaamer",
             email: "teste@teste.com",
             password: "teste123",
+        }
+        const user = await userAdapter.execute({
+            ...data,
             account_activate_at: new Date()
         })
 
         const sut = new ForgotPasswordUseCase(userRepository, userCodeRepository, mailAdapter)
 
-        return { sut, userRepository, user, userAdapter, userCodeRepository, mailAdapter }
+        return { sut, userRepository, user, userAdapter, userCodeRepository, mailAdapter, data }
     }
 
     it('should forgot password', async () => {
-        const { sut, user } = await makeSut()
+        const { sut, user, data } = await makeSut()
 
         const code = await sut.execute({
-            email: user.props.email
+            email: data.email
         })
 
         expect(code).toBeInstanceOf(UserCode)

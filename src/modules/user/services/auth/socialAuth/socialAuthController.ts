@@ -4,7 +4,6 @@ import { ActivateUserRequest, SocialAuthRequest, successAuthenticateUserResponse
 import { FastifyReply, FastifyRequest, FastifySchema, RouteShorthandOptions } from "fastify";
 import { validateInput } from "@/shared/utils/validateInput";
 import { SocialAuthUseCase } from "./socialAuthUseCase";
-import { userTokenResponse } from "@/shared/helpers";
 import { IController } from "@/types/services.types";
 import z from "zod";
 import { socialAuthProviders } from "../../../domain/social-auth";
@@ -19,12 +18,12 @@ export class SocialAuthController implements IController{
 
             const socialLoginUseCase = container.resolve(SocialAuthUseCase)
 
-            const user = await socialLoginUseCase.execute({
+            const tokens = await socialLoginUseCase.execute({
                 provider,
                 token
             })
 
-            return reply.status(200).send({data: userTokenResponse(user)});
+            return reply.status(200).send({data: tokens});
         } catch (error) {
             if(error instanceof AppError) {
                 return reply.status(error.status).send({ errors: [error] })
@@ -51,7 +50,7 @@ export class SocialAuthController implements IController{
             summary: "Authenticates a user and returns a token",
             body: authenticateUserBody,
             response: {
-                200: successAuthenticateUserResponse,
+                // 200: successAuthenticateUserResponse,
             },
         };
     }

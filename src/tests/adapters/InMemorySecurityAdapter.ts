@@ -16,6 +16,7 @@ export class InMemorySecurityAdapter implements ISecurityAdapter {
         const token: Tokens = {
             id: uuidv4(),
             subject: options.subject,
+            payload: data, // add payload property
             expiresIn: new Date(Date.now() + Number(options.expiresIn)),
             issuedAt: new Date()
         }
@@ -29,6 +30,7 @@ export class InMemorySecurityAdapter implements ISecurityAdapter {
 
         return {
             subject: data.subject,
+            payload: data.payload,
             expiresIn: data.expiresIn,
             issuedAt: data.issuedAt
         }

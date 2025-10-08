@@ -52,13 +52,6 @@ export class CreateUserUseCase implements IUseCase{
 
         const newUserInstance = User.create({ ...user.props }, user.id)
 
-        const userReturn: UserAuthenticateResponse = Object.assign(newUserInstance, {
-            token: {
-                accessToken,
-                refreshToken
-            }
-        })
-
         if (!account_activate_at) {
             try {
                 const createUserCode = new CreateUserCodeService(this.userRepository, this.UserCodeRepository, this.mailAdapter)
@@ -69,6 +62,11 @@ export class CreateUserUseCase implements IUseCase{
             }
         }
 
-        return userReturn
+        return {
+            token: {
+                accessToken,
+                refreshToken
+            }
+        }
     }
 }

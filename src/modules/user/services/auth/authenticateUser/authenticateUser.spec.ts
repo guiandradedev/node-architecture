@@ -17,7 +17,7 @@ describe('Authentication', async () => {
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
         const userAdapter = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
-        
+
         const sut = new AuthenticateUserUseCase(userRepository, hashAdapter, securityAdapter)
 
         return {
@@ -41,12 +41,17 @@ describe('Authentication', async () => {
             account_activate_at: new Date()
         })
 
-        const user = await sut.execute({
+        const response = await sut.execute({
             email: "flaamer@gmail.com",
             password: "teste123"
         })
 
-        expect(user).toBeInstanceOf(User)
+        expect(response).toMatchObject({
+            token: {
+                accessToken: expect.any(String),
+                refreshToken: expect.any(String),
+            }
+        })
     })
 
     it('should throw an error if user is not active', async () => {
@@ -119,16 +124,12 @@ describe('Authentication', async () => {
 
         const verifyAccess = await securityAdapter.decrypt(user.token.accessToken, process.env.ACCESS_TOKEN)
 
-        // expect(verifyAccess).toMatchObject<SecurityDecryptResponse>({
-        //     expiresIn: expect.any(Date),
-        //     issuedAt: expect.any(Date),
-        //     subject: user.id,
-        //     // payload: {
-        //     //     id: user.id,
-        //     //     email: user.props.email,
-        //     //     role: user.props.role
-        //     // }
-        // })
+        expect(verifyAccess).toMatchObject<SecurityDecryptResponse>({
+            expiresIn: expect.any(Date),
+            issuedAt: expect.any(Date),
+            subject: expect.any(String), // nao tenho acesso ao id do user aqui
+            payload: expect.any(Object)
+        })
     })
 
 })

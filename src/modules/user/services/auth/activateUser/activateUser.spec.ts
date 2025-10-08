@@ -19,11 +19,13 @@ describe("ActivateUserCode", () => {
         const hashAdapter = new InMemoryHashAdapter()
         const sutUser = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
        
-        const user = await sutUser.execute({
+        const response = await sutUser.execute({
             name: "Flaamer",
             email: "teste@teste.com",
             password: "teste123"
         })
+
+        const user = await userRepository.findByEmail("teste@teste.com")
 
         const code = await userCodeRepository.findByUserId({userId: user.id, type: 'ACTIVATE_ACCOUNT'})
 
@@ -75,11 +77,13 @@ describe("ActivateUserCode", () => {
         date.setDate(date.getDate() - 3)
         generateActivateCode.mockImplementationOnce(() => { return { code: '', expiresIn: date } });
 
-        const user = await sutUser.execute({
+        const response = await sutUser.execute({
             name: "Flaamer",
             email: "teste1@teste.com",
             password: "teste123"
         })
+
+        const user = await userRepository.findByEmail("teste1@teste.com")
         const code = await userCodeRepository.findByUserId({userId: user.id, type: 'ACTIVATE_ACCOUNT'})
 
         const sut = new ActivateUserUseCase(userRepository, userCodeRepository, mailAdapter)
@@ -94,13 +98,15 @@ describe("ActivateUserCode", () => {
     })
 
     it('should throw an error if user already active', async () => {
-        const { sut, sutUser, userCodeRepository } = await makeSut();
-        const user = await sutUser.execute({
+        const { sut, sutUser, userCodeRepository, userRepository } = await makeSut();
+        const response = await sutUser.execute({
             name: "Flaamer",
             email: "teste1@teste.com",
             password: "teste123",
             account_activate_at: new Date()
         })
+
+        const user = await userRepository.findByEmail("teste1@teste.com")
 
         const activateUser = sut.execute({
             userId: user.id,

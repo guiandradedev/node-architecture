@@ -15,7 +15,7 @@ describe("Create UserCode Service", async () => {
         const userTokenRepository = new InMemoryUserTokenRepository()
         const userCodeRepository = new InMemoryUserCodeRepository()
         const hashAdapter = new InMemoryHashAdapter()
-        const userAdapter = new CreateUserUseCase(userRepository, userTokenRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
+        const userAdapter = new CreateUserUseCase(userRepository, userCodeRepository, hashAdapter, mailAdapter, securityAdapter)
         
         const sut = new CreateUserCodeService(userRepository, userCodeRepository, mailAdapter)
 
@@ -23,13 +23,14 @@ describe("Create UserCode Service", async () => {
     }
 
     it('should not throw an error', async () => {
-        const { userAdapter, sut, userCodeRepository } = await makeSut();
+        const { userAdapter, sut, userRepository } = await makeSut();
 
-        const user = await userAdapter.execute({
+        const response_sut = await userAdapter.execute({
             email: "flaamer@gmail.com",
             name: "flaamer",
             password: "teste123",
         })
+        const user = await userRepository.findByEmail("flaamer@gmail.com")
         const response = sut.execute({ user, type: "ACTIVATE_ACCOUNT" })
 
         await expect(response).resolves.not.toThrow()

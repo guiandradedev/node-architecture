@@ -35,33 +35,31 @@ export class RefreshTokenUseCase implements IUseCase {
         const sessionService = new CreateSession(this.securityAdapter)
         const { accessToken: access, refreshToken: refresh, refreshTokenExpiresDate, accessTokenExpiresDate } = await sessionService.execute({ email: user.props.email, id: user.id })
 
-        const userAccessToken = UserToken.create({
+        const userRefreshToken = UserToken.create({
             token: refreshToken,
             expiresIn: payload.expiresIn,
         })
-        await this.userTokenRepository.create(userAccessToken)
+        await this.userTokenRepository.create(userRefreshToken)
+
 
         let access_payload: SecurityDecryptResponse | null = null;
         try {
             access_payload = await this.securityAdapter.decrypt(accessToken, process.env.ACCESS_TOKEN);
         } catch (error) {
             // try catch cala a boca
-            if(error instanceof ErrUnauthorized || error instanceof ErrMissingParam || error instanceof ErrInvalidParam) {
-                access_payload = null
-            }
         }
         if (access_payload) {
-                if (access_payload.subject !== user.id) {
-                    throw new ErrUnauthorized();
-                }
-                // se conseguir decodificar o access token,
-                // significa que ta ativo ainda, coloca na blacklist
-                const userRefreshToken = UserToken.create({
-                    token: accessToken,
-                    expiresIn: access_payload.expiresIn,
-                })
-                await this.userTokenRepository.create(userRefreshToken)
+            if (access_payload.subject !== user.id) {
+                throw new ErrUnauthorized();
             }
+            // se conseguir decodificar o access token,
+            // significa que ta ativo ainda, coloca na blacklist
+            const userAccessToken = UserToken.create({
+                token: accessToken,
+                expiresIn: access_payload.expiresIn,
+            })
+            await this.userTokenRepository.create(userAccessToken)
+        }
 
 
         return { accessToken: access, refreshToken: refresh, refreshTokenExpiresDate, accessTokenExpiresDate };
